@@ -1,11 +1,15 @@
 ﻿using Contracts;
 using LoggerService;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entities;
+using Microsoft.EntityFrameworkCore;
+using Repository;
 
 namespace PrematureKidsAPI.Extensions
 {
@@ -36,6 +40,16 @@ namespace PrematureKidsAPI.Extensions
         public static void ConfigureLoggerService(this IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+        }
+
+        public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddDbContext<RepositoryContext>(o => o.UseMySql(config["mysqlconnection:connectionString"]));
+        }
+
+        public static void ConfigureRepositoryWrapper(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         }
 
     }
