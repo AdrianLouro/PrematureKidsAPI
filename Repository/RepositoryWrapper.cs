@@ -7,7 +7,7 @@ namespace Repository
     {
         private RepositoryContext _repoContext;
         private IParentRepository _parent;
-        private IAccountRepository _account;
+        private IUserRepository _user;
 
         public IParentRepository Parent
         {
@@ -22,16 +22,16 @@ namespace Repository
             }
         }
 
-        public IAccountRepository Account
+        public IUserRepository User
         {
             get
             {
-                if (_account == null)
+                if (_user == null)
                 {
-                    _account = new AccountRepository(_repoContext);
+                    _user = new UserRepository(_repoContext);
                 }
 
-                return _account;
+                return _user;
             }
         }
 

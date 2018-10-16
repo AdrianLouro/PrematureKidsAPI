@@ -10,16 +10,20 @@ namespace Entities.Models
     public class Parent
     {
         [Key]
+        [Column("id")]
         public Guid Id { get; set; }
 
+        [Column("name")]
         [Required(ErrorMessage = "Name is required")]
         [StringLength(255, ErrorMessage = "Name can't be longer than 255 characters")]
         public string Name { get; set; }
 
+        [Column("id_number")]
         [Required(ErrorMessage = "ID number is required")]
         [StringLength(255, ErrorMessage = "ID number can't be longer than 255 characters")]
         public string IdNumber { get; set; }
 
+        [Column("telephone")]
         [Required(ErrorMessage = "Telephone is required")]
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }

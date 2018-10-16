@@ -4,6 +4,6 @@
     {
         IParentRepository Parent { get; }
 
-        IAccountRepository Account { get; }
+        IUserRepository User { get; }
     }
 }

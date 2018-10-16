@@ -14,7 +14,6 @@ namespace Entities
 
         public DbSet<Parent> Parents { get; set; }
 
-        public DbSet<Account> Accounts { get; set; }
-
+        public DbSet<User> Users { get; set; }
     }
 }
