@@ -9,5 +9,9 @@ namespace Contracts
         User GetUserById(Guid id);
 
         UserReduced GetUserWithoutDetail(Guid id);
+
+        Guid CreateUser(User user);
+
+        void DeleteUser(User user);
     }
 }

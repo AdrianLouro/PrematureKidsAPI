@@ -4,6 +4,7 @@ using System.Linq;
 using Contracts;
 using Entities;
 using Entities.ExtendedModels;
+using Entities.Extensions;
 using Entities.Models;
 
 namespace Repository
@@ -33,10 +34,24 @@ namespace Repository
             };
         }
 
-        public void CreateParent(Parent parent)
+        public Guid CreateParent(Parent parent)
         {
             parent.Id = Guid.NewGuid();
             Create(parent);
+            Save();
+            return parent.Id;
+        }
+
+        public void UpdateParent(Parent dbParent, Parent parent)
+        {
+            dbParent.Map(parent);
+            Update(dbParent);
+            Save();
+        }
+
+        public void DeleteParent(Parent parent)
+        {
+            Delete(parent);
             Save();
         }
     }

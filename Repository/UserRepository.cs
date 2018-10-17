@@ -22,5 +22,19 @@ namespace Repository
         {
             return new UserReduced(GetUserById(id));
         }
+
+        public Guid CreateUser(User user)
+        {
+            user.Id = Guid.NewGuid();
+            Create(user);
+            Save();
+            return user.Id;
+        }
+
+        public void DeleteUser(User user)
+        {
+            Delete(user);
+            Save();
+        }
     }
 }

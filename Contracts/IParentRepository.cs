@@ -14,6 +14,10 @@ namespace Contracts
 
         ParentExtended GetParentWithDetails(Guid id);
 
-        void CreateParent(Parent parent);
+        Guid CreateParent(Parent parent);
+
+        void UpdateParent(Parent dbParent, Parent parent);
+
+        void DeleteParent(Parent parent);
     }
 }

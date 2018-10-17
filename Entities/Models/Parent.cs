@@ -7,7 +7,7 @@ using System.Text;
 namespace Entities.Models
 {
     [Table("parent")]
-    public class Parent
+    public class Parent : IEntity
     {
         [Key] [Column("id")] public Guid Id { get; set; }
 
@@ -26,6 +26,20 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
 
-        //[ForeignKey(nameof(User))] public User user { get; set; }
+        [Column("user_id")]
+        [Required(ErrorMessage = "User ID is required")]
+        public Guid UserId { get; set; }
+
+        //[ForeignKey("id")]
+        //public User user { get; set; }
+
+        public Parent(Guid id, string name, string idNumber, string telephone, Guid userId)
+        {
+            Id = id;
+            Name = name;
+            IdNumber = idNumber;
+            Telephone = telephone;
+            UserId = userId;
+        }
     }
 }

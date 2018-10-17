@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Contracts;
+using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +51,7 @@ namespace PrematureKidsAPI.Controllers
                 }
                 else
                 {
-                    _logger.LogInfo($"Returned parent with id: {id}");
+                    _logger.LogInfo($"Returned parentUser with id: {id}");
                     return Ok(parent);
                 }
             }
@@ -86,7 +88,50 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateParent([FromBody] Parent parent)
+        public IActionResult CreateParent([FromBody] ParentUser parentUser)
+        {
+            try
+            {
+                if (parentUser == null)
+                {
+                    _logger.LogError("Parent object sent from client is null.");
+                    return BadRequest("Parent object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid parentUser object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                var userId = _repository.User.CreateUser(new User(
+                    parentUser.UserId,
+                    parentUser.Email,
+                    parentUser.Password,
+                    parentUser.Role
+                ));
+
+                var parent = new Parent(
+                    parentUser.ParentId,
+                    parentUser.Name,
+                    parentUser.IdNumber,
+                    parentUser.Telephone,
+                    userId
+                );
+
+                _repository.Parent.CreateParent(parent);
+
+                return CreatedAtRoute("ParentById", new {id = parentUser.UserId}, parent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside CreateParent action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateParent(Guid id, [FromBody] Parent parent)
         {
             try
             {
@@ -102,13 +147,44 @@ namespace PrematureKidsAPI.Controllers
                     return BadRequest("Invalid model object");
                 }
 
-                _repository.Parent.CreateParent(parent);
+                var dbParent = _repository.Parent.GetParentById(id);
+                if (dbParent == null)
+                {
+                    _logger.LogError($"Parent with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
 
-                return CreatedAtRoute("ParentById", new {id = parent.Id}, parent);
+                _repository.Parent.UpdateParent(dbParent, parent);
+
+                return NoContent();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong inside CreateParent action: {ex.Message}");
+                _logger.LogError($"Something went wrong inside UpdateParent action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteParent(Guid id)
+        {
+            try
+            {
+                var parent = _repository.Parent.GetParentById(id);
+                if (parent == null)
+                {
+                    _logger.LogError($"Parent with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+
+                _repository.User.DeleteUser(_repository.User.FindByCondition(user => user.Id == parent.UserId)
+                    .FirstOrDefault());
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside DeleteParent action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

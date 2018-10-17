@@ -7,11 +7,9 @@ using System.Text;
 namespace Entities.Models
 {
     [Table("doctor")]
-    public class Doctor
+    public class Doctor : IEntity
     {
-        [Key]
-        [Column("id")]
-        public Guid Id { get; set; }
+        [Key] [Column("id")] public Guid Id { get; set; }
 
         [Column("name")]
         [Required(ErrorMessage = "Name is required")]
@@ -27,5 +25,11 @@ namespace Entities.Models
         [Required(ErrorMessage = "Telephone is required")]
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
+
+        [Column("user_id")]
+        [Required(ErrorMessage = "User ID is required")]
+        public Guid UserId { get; set; }
+
+        //public User user { get; set; }
     }
 }
