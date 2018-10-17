@@ -13,5 +13,7 @@ namespace Contracts
         Parent GetParentById(Guid id);
 
         ParentExtended GetParentWithDetails(Guid id);
+
+        void CreateParent(Parent parent);
     }
 }

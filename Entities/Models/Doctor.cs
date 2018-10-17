@@ -6,26 +6,26 @@ using System.Text;
 
 namespace Entities.Models
 {
-    [Table("parent")]
-    public class Parent
+    [Table("doctor")]
+    public class Doctor
     {
-        [Key] [Column("id")] public Guid Id { get; set; }
+        [Key]
+        [Column("id")]
+        public Guid Id { get; set; }
 
         [Column("name")]
         [Required(ErrorMessage = "Name is required")]
         [StringLength(255, ErrorMessage = "Name can't be longer than 255 characters")]
         public string Name { get; set; }
 
-        [Column("id_number")]
-        [Required(ErrorMessage = "ID number is required")]
-        [StringLength(255, ErrorMessage = "ID number can't be longer than 255 characters")]
-        public string IdNumber { get; set; }
+        [Column("board_number")]
+        [Required(ErrorMessage = "Board number is required")]
+        [StringLength(255, ErrorMessage = "Board number can't be longer than 255 characters")]
+        public string BoardNumber { get; set; }
 
         [Column("telephone")]
         [Required(ErrorMessage = "Telephone is required")]
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
-
-        //[ForeignKey(nameof(User))] public User user { get; set; }
     }
 }

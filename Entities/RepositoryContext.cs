@@ -8,12 +8,14 @@ namespace Entities
 {
     public class RepositoryContext : DbContext
     {
-        public RepositoryContext(DbContextOptions options) : base(options)
-        {
-        }
+        public DbSet<User> Users { get; set; }
 
         public DbSet<Parent> Parents { get; set; }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+
+        public RepositoryContext(DbContextOptions options) : base(options)
+        {
+        }
     }
 }

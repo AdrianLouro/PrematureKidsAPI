@@ -1,5 +1,6 @@
 ﻿using System;
 using Contracts;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PrematureKidsAPI.Controllers
@@ -34,7 +35,7 @@ namespace PrematureKidsAPI.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "ParentById")]
         public IActionResult GetParentById(Guid id)
         {
             try
@@ -80,6 +81,34 @@ namespace PrematureKidsAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"Something went wrong inside GetUserWithoutDetails action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateParent([FromBody] Parent parent)
+        {
+            try
+            {
+                if (parent == null)
+                {
+                    _logger.LogError("Parent object sent from client is null.");
+                    return BadRequest("Parent object is null");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogError("Invalid parent object sent from client.");
+                    return BadRequest("Invalid model object");
+                }
+
+                _repository.Parent.CreateParent(parent);
+
+                return CreatedAtRoute("ParentById", new {id = parent.Id}, parent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside CreateParent action: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

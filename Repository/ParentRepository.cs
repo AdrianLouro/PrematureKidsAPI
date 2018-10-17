@@ -32,5 +32,12 @@ namespace Repository
                 Email = RepositoryContext.Users.Where((user) => user.Id == parent.Id).FirstOrDefault().Email
             };
         }
+
+        public void CreateParent(Parent parent)
+        {
+            parent.Id = Guid.NewGuid();
+            Create(parent);
+            Save();
+        }
     }
 }

@@ -23,9 +23,9 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Password can't be longer than 255 characters")]
         public string Password { get; set; }
 
-        [Column("type")]
-        [Required(ErrorMessage = "Type is required")]
+        [Column("role")]
+        [Required(ErrorMessage = "Role is required")]
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
-        public string Type { get; set; }
+        public string Role { get; set; }
     }
 }

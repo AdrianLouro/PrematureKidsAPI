@@ -6,8 +6,10 @@ namespace Repository
     public class RepositoryWrapper : IRepositoryWrapper
     {
         private RepositoryContext _repoContext;
-        private IParentRepository _parent;
         private IUserRepository _user;
+        private IParentRepository _parent;
+        private IDoctorRepository _doctor;
+
 
         public IParentRepository Parent
         {
@@ -32,6 +34,19 @@ namespace Repository
                 }
 
                 return _user;
+            }
+        }
+
+        public IDoctorRepository Doctor
+        {
+            get
+            {
+                if (_doctor == null)
+                {
+                    _doctor = new DoctorRepository(_repoContext);
+                }
+
+                return _doctor;
             }
         }
 

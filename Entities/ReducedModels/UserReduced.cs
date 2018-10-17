@@ -9,7 +9,7 @@ namespace Entities.ReducedModels
 
         public string Email { get; set; }
 
-        public string Type { get; set; }
+        public string Role { get; set; }
 
         public UserReduced()
         {
@@ -19,7 +19,7 @@ namespace Entities.ReducedModels
         {
             Id = user.Id;
             Email = user.Email;
-            Type = user.Type;
+            Role = user.Role;
         }
     }
 }
