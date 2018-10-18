@@ -35,6 +35,7 @@ namespace PrematureKidsAPI
             services.ConfigureLoggerService();
             services.ConfigureMySqlContext(Configuration);
             services.ConfigureRepositoryWrapper();
+            services.ConfigureAuthenticationService();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -69,6 +70,8 @@ namespace PrematureKidsAPI
                     await next();
                 }
             });
+
+            app.UseAuthentication();
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();

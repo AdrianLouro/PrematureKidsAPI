@@ -3,6 +3,7 @@ using System.Linq;
 using Contracts;
 using Entities.ExtendedModels;
 using Entities.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace PrematureKidsAPI.Controllers
@@ -20,6 +21,7 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpGet]
+        //[HttpGet, Authorize(Roles = "parent")]
         public IActionResult GetAllParents()
         {
             try
