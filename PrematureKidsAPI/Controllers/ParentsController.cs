@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Contracts;
+using CryptoHelper;
 using Entities.ExtendedModels;
 using Entities.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -109,7 +110,7 @@ namespace PrematureKidsAPI.Controllers
                 var userId = _repository.User.CreateUser(new User(
                     parentUser.UserId,
                     parentUser.Email,
-                    parentUser.Password,
+                    Crypto.HashPassword(parentUser.Password),
                     parentUser.Role
                 ));
 

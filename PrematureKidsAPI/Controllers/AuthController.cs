@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using Contracts;
+using CryptoHelper;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -26,11 +27,11 @@ namespace PrematureKidsAPI.Controllers
         {
             if (user == null) return BadRequest("Invalid client request");
 
-            User dbUser = _repository.User.FindByCondition(
-                (u => u.Email == user.Email && u.Password == user.Password)
-            ).FirstOrDefault();
+            User dbUser = _repository.User.FindByCondition((u => u.Email == user.Email)).FirstOrDefault();
 
-            if (dbUser == null) return Unauthorized();
+            if (dbUser == null ||
+                (dbUser != null && !Crypto.VerifyHashedPassword(dbUser.Password, user.Password))
+            ) return Unauthorized();
 
             var tokenOptions = new JwtSecurityToken(
                 issuer: "http://localhost:5000",
