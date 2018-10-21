@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using ActionFilters;
 using Contracts;
 using CryptoHelper;
 using Entities.ExtendedModels;
 using Entities.Models;
+using Entities.ReducedModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,174 +25,72 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpGet]
-        //[HttpGet, Authorize(Roles = "parent")]
         public IActionResult GetAllParents()
         {
-            try
-            {
-                var parents = _repository.Parent.GetAllParents();
-
-                _logger.LogInfo($"Returned all parents from database.");
-
-                return Ok(parents);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetAllParents action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _logger.LogInfo($"Returned all parents from database.");
+            return Ok(_repository.Parent.GetAllParents());
         }
 
         [HttpGet("{id}", Name = "ParentById")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetParentById(Guid id)
         {
-            try
-            {
-                var parent = _repository.Parent.GetParentById(id);
-
-                if (parent == null)
-                {
-                    _logger.LogError($"Parent with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-                else
-                {
-                    _logger.LogInfo($"Returned parentUser with id: {id}");
-                    return Ok(parent);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetParentById action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _logger.LogInfo($"Returned parentUser with id: {id}");
+            return Ok(HttpContext.Items["entity"] as Parent);
         }
 
         [HttpGet("{id}/user")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetUserWithoutDetails(Guid id)
         {
-            try
-            {
-                var user = _repository.User.GetUserWithoutDetail(id);
-
-                if (user.Id.Equals(Guid.Empty))
-                {
-                    _logger.LogError($"User with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-                else
-                {
-                    _logger.LogInfo($"Returned user without details for id: {id}");
-                    return Ok(user);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside GetUserWithoutDetails action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _logger.LogInfo($"Returned user without details for id: {id}");
+            return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Parent).UserId));
         }
+
 
         [HttpPost]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateParent([FromBody] ParentUser parentUser)
         {
-            try
-            {
-                if (parentUser == null)
-                {
-                    _logger.LogError("Parent object sent from client is null.");
-                    return BadRequest("Parent object is null");
-                }
+            var userId = _repository.User.CreateUser(new User(
+                parentUser.UserId,
+                parentUser.Email,
+                Crypto.HashPassword(parentUser.Password),
+                parentUser.Role
+            ));
 
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogError("Invalid parentUser object sent from client.");
-                    return BadRequest("Invalid model object");
-                }
+            var parent = new Parent(
+                parentUser.ParentId,
+                parentUser.Name,
+                parentUser.IdNumber,
+                parentUser.Telephone,
+                userId
+            );
 
-                var userId = _repository.User.CreateUser(new User(
-                    parentUser.UserId,
-                    parentUser.Email,
-                    Crypto.HashPassword(parentUser.Password),
-                    parentUser.Role
-                ));
-
-                var parent = new Parent(
-                    parentUser.ParentId,
-                    parentUser.Name,
-                    parentUser.IdNumber,
-                    parentUser.Telephone,
-                    userId
-                );
-
-                _repository.Parent.CreateParent(parent);
-
-                return CreatedAtRoute("ParentById", new {id = parentUser.UserId}, parent);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside CreateParent action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _repository.Parent.CreateParent(parent);
+            return CreatedAtRoute("ParentById", new {id = parentUser.UserId}, parent);
         }
 
+
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult UpdateParent(Guid id, [FromBody] Parent parent)
         {
-            try
-            {
-                if (parent == null)
-                {
-                    _logger.LogError("Parent object sent from client is null.");
-                    return BadRequest("Parent object is null");
-                }
-
-                if (!ModelState.IsValid)
-                {
-                    _logger.LogError("Invalid parent object sent from client.");
-                    return BadRequest("Invalid model object");
-                }
-
-                var dbParent = _repository.Parent.GetParentById(id);
-                if (dbParent == null)
-                {
-                    _logger.LogError($"Parent with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-
-                _repository.Parent.UpdateParent(dbParent, parent);
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside UpdateParent action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _repository.Parent.UpdateParent(HttpContext.Items["entity"] as Parent, parent);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult DeleteParent(Guid id)
         {
-            try
-            {
-                var parent = _repository.Parent.GetParentById(id);
-                if (parent == null)
-                {
-                    _logger.LogError($"Parent with id: {id}, hasn't been found in db.");
-                    return NotFound();
-                }
-
-                _repository.User.DeleteUser(_repository.User.FindByCondition(user => user.Id == parent.UserId)
-                    .FirstOrDefault());
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong inside DeleteParent action: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            _repository.User.DeleteUser(
+                _repository.User
+                    .FindByCondition((user => user.Id == (HttpContext.Items["entity"] as Parent).UserId))
+                    .FirstOrDefault()
+            );
+            return NoContent();
         }
     }
 }

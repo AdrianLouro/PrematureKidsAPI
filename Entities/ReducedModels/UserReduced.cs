@@ -3,7 +3,7 @@ using Entities.Models;
 
 namespace Entities.ReducedModels
 {
-    public class UserReduced
+    public class UserReduced: IEntity
     {
         public Guid Id { get; set; }
 

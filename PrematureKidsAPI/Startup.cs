@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using ActionFilters;
+using Contracts;
+using Entities;
+using Entities.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -36,12 +40,14 @@ namespace PrematureKidsAPI
             services.ConfigureMySqlContext(Configuration);
             services.ConfigureRepositoryWrapper();
             services.ConfigureAuthenticationService();
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ValidateEntityExistsAttribute<Parent>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerManager logger)
         {
             if (env.IsDevelopment())
             {
@@ -72,6 +78,7 @@ namespace PrematureKidsAPI
             });
 
             app.UseAuthentication();
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();

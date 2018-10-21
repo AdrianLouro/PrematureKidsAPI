@@ -4,12 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using ActionFilters;
 using Contracts;
 using CryptoHelper;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using PrematureKidsAPI.Models;
+using CustomExceptionMiddleware.Models;
 
 namespace PrematureKidsAPI.Controllers
 {
@@ -23,17 +24,24 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpPost, Route("login")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult Login([FromBody] LoginModel user)
         {
-            if (user == null) return BadRequest("Invalid client request");
-
             User dbUser = _repository.User.FindByCondition((u => u.Email == user.Email)).FirstOrDefault();
 
-            if (dbUser == null ||
-                (dbUser != null && !Crypto.VerifyHashedPassword(dbUser.Password, user.Password))
-            ) return Unauthorized();
+            if (userDoesNotExist(user, dbUser)) return Unauthorized();
 
-            var tokenOptions = new JwtSecurityToken(
+            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(getJwtSecurityToken(dbUser))});
+        }
+
+        private bool userDoesNotExist(LoginModel user, User dbUser)
+        {
+            return dbUser == null || (dbUser != null && !Crypto.VerifyHashedPassword(dbUser.Password, user.Password));
+        }
+
+        private JwtSecurityToken getJwtSecurityToken(User dbUser)
+        {
+            return new JwtSecurityToken(
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
                 claims: new List<Claim>() {new Claim("role", dbUser.Role)},
@@ -43,8 +51,6 @@ namespace PrematureKidsAPI.Controllers
                     SecurityAlgorithms.HmacSha256
                 )
             );
-
-            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions)});
         }
     }
 }
