@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,14 @@ namespace PrematureKidsAPI
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateEntityExistsAttribute<Parent>>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc(config =>
+                {
+                    config.RespectBrowserAcceptHeader = true;
+                    config.ReturnHttpNotAcceptable = true;
+                    config.InputFormatters.Add(new XmlSerializerInputFormatter());
+                    config.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                }
+            ).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,16 +67,13 @@ namespace PrematureKidsAPI
             }
 
             app.UseCors("CorsPolicy");
-
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All
             });
-
             app.Use(async (context, next) =>
             {
                 await next();
-
                 if (context.Response.StatusCode == 404
                     && !Path.HasExtension(context.Request.Path.Value))
                 {
@@ -76,10 +81,8 @@ namespace PrematureKidsAPI
                     await next();
                 }
             });
-
             app.UseAuthentication();
             app.ConfigureCustomExceptionMiddleware();
-
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMvc();
