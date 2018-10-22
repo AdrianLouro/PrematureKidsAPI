@@ -44,7 +44,7 @@ namespace PrematureKidsAPI.Controllers
         public IActionResult GetUserWithoutDetails(Guid id)
         {
             _logger.LogInfo($"Returned user without details for id: {id}");
-            return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Doctor).UserId));
+            return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Doctor).Id));
         }
 
 
@@ -53,7 +53,7 @@ namespace PrematureKidsAPI.Controllers
         public IActionResult CreateDoctor([FromBody] DoctorUser doctorUser)
         {
             var userId = _repository.User.CreateUser(new User(
-                doctorUser.UserId,
+                doctorUser.Id,
                 doctorUser.Email,
                 Crypto.HashPassword(doctorUser.Password),
                 doctorUser.Role
@@ -63,12 +63,11 @@ namespace PrematureKidsAPI.Controllers
                 userId,
                 doctorUser.Name,
                 doctorUser.BoardNumber,
-                doctorUser.Telephone,
-                userId
+                doctorUser.Telephone
             );
 
             _repository.Doctor.CreateDoctor(doctor);
-            return CreatedAtRoute("DoctorById", new {id = doctorUser.UserId}, doctor);
+            return CreatedAtRoute("DoctorById", new {id = doctorUser.Id}, doctor);
         }
 
 
@@ -87,7 +86,7 @@ namespace PrematureKidsAPI.Controllers
         {
             _repository.User.DeleteUser(
                 _repository.User
-                    .FindByCondition((user => user.Id == (HttpContext.Items["entity"] as Doctor).UserId))
+                    .FindByCondition((user => user.Id == (HttpContext.Items["entity"] as Doctor).Id))
                     .FirstOrDefault()
             );
             return NoContent();

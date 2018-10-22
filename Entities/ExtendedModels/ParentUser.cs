@@ -7,9 +7,7 @@ namespace Entities.ExtendedModels
 {
     public class ParentUser : IEntity
     {
-        public Guid ParentId { get; set; }
-
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
@@ -27,7 +25,5 @@ namespace Entities.ExtendedModels
         public string Password { get; set; }
 
         public string Role = "parent";
-
-        public Guid Id { get; set; }
     }
 }

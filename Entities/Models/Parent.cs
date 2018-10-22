@@ -26,17 +26,12 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
 
-        [Column("user_id")]
-        [Required(ErrorMessage = "User ID is required")]
-        public Guid UserId { get; set; }
-
-        public Parent(Guid id, string name, string idNumber, string telephone, Guid userId)
+        public Parent(Guid id, string name, string idNumber, string telephone)
         {
             Id = id;
             Name = name;
             IdNumber = idNumber;
             Telephone = telephone;
-            UserId = userId;
         }
     }
 }

@@ -16,8 +16,6 @@ namespace Entities.ExtendedModels
 
         public string Email { get; set; }
 
-        public Guid UserId { get; set; }
-
         public ParentExtended()
         {
         }
@@ -28,7 +26,6 @@ namespace Entities.ExtendedModels
             Name = parent.Name;
             IdNumber = parent.IdNumber;
             Telephone = parent.Telephone;
-            UserId = parent.UserId;
         }
     }
 }

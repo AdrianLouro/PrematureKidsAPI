@@ -16,8 +16,6 @@ namespace Entities.ExtendedModels
 
         public string Email { get; set; }
 
-        public Guid UserId { get; set; }
-
         public DoctorExtended()
         {
         }
@@ -28,7 +26,6 @@ namespace Entities.ExtendedModels
             Name = doctor.Name;
             BoardNumber = doctor.BoardNumber;
             Telephone = doctor.Telephone;
-            UserId = doctor.UserId;
         }
     }
 }
