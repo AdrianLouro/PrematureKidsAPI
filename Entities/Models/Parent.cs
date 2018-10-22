@@ -30,9 +30,6 @@ namespace Entities.Models
         [Required(ErrorMessage = "User ID is required")]
         public Guid UserId { get; set; }
 
-        //[ForeignKey("id")]
-        //public User user { get; set; }
-
         public Parent(Guid id, string name, string idNumber, string telephone, Guid userId)
         {
             Id = id;

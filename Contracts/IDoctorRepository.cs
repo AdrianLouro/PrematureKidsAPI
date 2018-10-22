@@ -15,5 +15,9 @@ namespace Contracts
         DoctorExtended GetDoctorWithDetails(Guid id);
 
         void CreateDoctor(Doctor doctor);
+
+        void UpdateDoctor(Doctor dbDoctor, Doctor doctor);
+
+        void DeleteDoctor(Doctor doctor);
     }
 }

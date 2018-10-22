@@ -36,7 +36,7 @@ namespace Repository
 
         public Guid CreateParent(Parent parent)
         {
-            parent.Id = Guid.NewGuid();
+            //parent.Id = Guid.NewGuid();
             Create(parent);
             Save();
             return parent.Id;

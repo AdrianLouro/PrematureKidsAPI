@@ -44,7 +44,11 @@ namespace PrematureKidsAPI.Controllers
             return new JwtSecurityToken(
                 issuer: "http://localhost:5000",
                 audience: "http://localhost:5000",
-                claims: new List<Claim>() {new Claim("role", dbUser.Role)},
+                claims: new List<Claim>()
+                {
+                    new Claim("role", dbUser.Role),
+                    new Claim("sub", dbUser.Id.ToString()),
+                },
                 expires: DateTime.Now.AddMonths(3),
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345")),

@@ -4,6 +4,7 @@ using System.Linq;
 using Contracts;
 using Entities;
 using Entities.ExtendedModels;
+using Entities.Extensions;
 using Entities.Models;
 
 namespace Repository
@@ -35,8 +36,21 @@ namespace Repository
 
         public void CreateDoctor(Doctor doctor)
         {
-            doctor.Id = Guid.NewGuid();
+            //doctor.Id = Guid.NewGuid();
             Create(doctor);
+            Save();
+        }
+
+        public void UpdateDoctor(Doctor dbDoctor, Doctor doctor)
+        {
+            dbDoctor.Map(doctor);
+            Update(dbDoctor);
+            Save();
+        }
+
+        public void DeleteDoctor(Doctor doctor)
+        {
+            Delete(doctor);
             Save();
         }
     }

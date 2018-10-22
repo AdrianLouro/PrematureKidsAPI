@@ -60,7 +60,7 @@ namespace PrematureKidsAPI.Controllers
             ));
 
             var parent = new Parent(
-                parentUser.ParentId,
+                userId,
                 parentUser.Name,
                 parentUser.IdNumber,
                 parentUser.Telephone,
@@ -72,7 +72,7 @@ namespace PrematureKidsAPI.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult UpdateParent(Guid id, [FromBody] Parent parent)

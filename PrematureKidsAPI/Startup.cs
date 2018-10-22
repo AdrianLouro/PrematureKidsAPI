@@ -42,7 +42,9 @@ namespace PrematureKidsAPI
             services.ConfigureRepositoryWrapper();
             services.ConfigureAuthenticationService();
             services.AddScoped<ValidationFilterAttribute>();
+
             services.AddScoped<ValidateEntityExistsAttribute<Parent>>();
+            services.AddScoped<ValidateEntityExistsAttribute<Doctor>>();
 
             services.AddMvc(config =>
                 {

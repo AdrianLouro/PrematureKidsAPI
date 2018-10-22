@@ -30,6 +30,13 @@ namespace Entities.Models
         [Required(ErrorMessage = "User ID is required")]
         public Guid UserId { get; set; }
 
-        //public User user { get; set; }
+        public Doctor(Guid id, string name, string boardNumber, string telephone, Guid userId)
+        {
+            Id = id;
+            Name = name;
+            BoardNumber = boardNumber;
+            Telephone = telephone;
+            UserId = userId;
+        }
     }
 }
