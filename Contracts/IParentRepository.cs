@@ -12,6 +12,8 @@ namespace Contracts
 
         Parent GetParentById(Guid id);
 
+        IEnumerable<Child> GetChildrenOfParent(Guid id);
+
         ParentExtended GetParentWithDetails(Guid id);
 
         Guid CreateParent(Parent parent);
