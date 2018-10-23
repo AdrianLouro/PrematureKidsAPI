@@ -47,6 +47,14 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Doctor).Id));
         }
 
+        [HttpGet("{id}/patients")]
+        //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
+        public IActionResult GetPatients(Guid id)
+        {
+            _logger.LogInfo($"Returned patients for id: {id}");
+            return Ok(_repository.Doctor.GetPatientsOfDoctor(id));
+            //return Ok((HttpContext.Items["entity"] as Doctor).Patients);
+        }
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]

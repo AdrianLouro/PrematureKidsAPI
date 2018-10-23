@@ -31,12 +31,18 @@ namespace Repository
             return this.RepositoryContext.Set<Parent>()
                 .Include(p => p.Children)
                 .ThenInclude(cp => cp.Child)
-                .SingleOrDefault(x => x.Id.Equals(id)).Children.Select(cp => new Child(
-                    cp.Child.Id,
-                    cp.Child.Name,
-                    cp.Child.DateOfBirth,
-                    cp.Child.Gender
-                ));
+                .SingleOrDefault(x => x.Id.Equals(id)).Children.Select(cp => cp.Child);
+        }
+
+        public IEnumerable<Doctor> GetDoctorsOfParent(Guid id)
+        {
+            return this.RepositoryContext.Set<Parent>()
+                .Include(p => p.Children)
+                .ThenInclude(cp => cp.Child)
+                .ThenInclude(c => c.Doctors)
+                .ThenInclude(cd => cd.Doctor)
+                .SingleOrDefault(x => x.Id.Equals(id)).Children.Select(cp => cp.Child)
+                .Select(c => c.Doctors.Select(cd => cd.Doctor)).SelectMany(x => x).Distinct();
         }
 
         public ParentExtended GetParentWithDetails(Guid id)

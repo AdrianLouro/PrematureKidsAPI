@@ -27,7 +27,10 @@ namespace Entities.Models
         public string Gender { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<ChildParent> Parents { get; set; } = new List<ChildParent>();
+        public virtual IEnumerable<ChildParent> Parents { get; set; } = new List<ChildParent>();
+
+        [JsonIgnore]
+        public virtual IEnumerable<ChildDoctor> Doctors { get; set; } = new List<ChildDoctor>();
 
         public Child(Guid id, string name, DateTime dateOfBirth, string gender)
         {

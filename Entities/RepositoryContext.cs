@@ -18,6 +18,8 @@ namespace Entities
 
         public DbSet<ChildParent> ChildrenParents { get; set; }
 
+        public DbSet<ChildDoctor> ChildrenDoctors { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }
@@ -35,6 +37,18 @@ namespace Entities
                 .HasOne<Parent>(cp => cp.Parent)
                 .WithMany(p => p.Children)
                 .HasForeignKey(cp => cp.ParentId);
+
+            modelBuilder.Entity<ChildDoctor>().HasKey(cd => new {cd.ChildId, cd.DoctorId});
+
+            modelBuilder.Entity<ChildDoctor>()
+                .HasOne<Child>(cd => cd.Child)
+                .WithMany(c => c.Doctors)
+                .HasForeignKey(cd => cd.ChildId);
+
+            modelBuilder.Entity<ChildDoctor>()
+                .HasOne<Doctor>(cd => cd.Doctor)
+                .WithMany(d => d.Patients)
+                .HasForeignKey(cd => cd.DoctorId);
         }
     }
 }

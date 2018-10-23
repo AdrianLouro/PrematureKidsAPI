@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Entities.Models
 {
@@ -25,6 +26,9 @@ namespace Entities.Models
         [Required(ErrorMessage = "Telephone is required")]
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
+
+        [JsonIgnore]
+        public virtual IEnumerable<ChildDoctor> Patients { get; set; } = new List<ChildDoctor>();
 
         public Doctor(Guid id, string name, string boardNumber, string telephone)
         {

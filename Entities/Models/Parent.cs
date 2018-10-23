@@ -28,7 +28,7 @@ namespace Entities.Models
         public string Telephone { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<ChildParent> Children { get; set; } = new List<ChildParent>();
+        public virtual IEnumerable<ChildParent> Children { get; set; } = new List<ChildParent>();
 
         public Parent(Guid id, string name, string idNumber, string telephone)
         {
