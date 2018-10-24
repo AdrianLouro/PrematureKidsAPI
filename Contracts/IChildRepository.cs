@@ -9,8 +9,12 @@ namespace Contracts
     public interface IChildRepository : IRepositoryBase<Child>
     {
         IEnumerable<Child> GetAllChildren();
-
+        
         Child GetChildById(Guid id);
+
+        IEnumerable<Parent> GetParentsOfChild(Guid id);
+
+        IEnumerable<Doctor> GetDoctorsOfChild(Guid id);
 
         Guid CreateChild(Child child);
 

@@ -6,6 +6,7 @@ using Entities;
 using Entities.ExtendedModels;
 using Entities.Extensions;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
@@ -23,6 +24,22 @@ namespace Repository
         public Child GetChildById(Guid id)
         {
             return FindByCondition((child) => child.Id.Equals((id))).FirstOrDefault();
+        }
+
+        public IEnumerable<Parent> GetParentsOfChild(Guid id)
+        {
+            return this.RepositoryContext.Set<Child>()
+                .Include(c => c.Parents)
+                .ThenInclude(cp => cp.Parent)
+                .SingleOrDefault(x => x.Id.Equals(id)).Parents.Select(cp => cp.Parent);
+        }
+
+        public IEnumerable<Doctor> GetDoctorsOfChild(Guid id)
+        {
+            return this.RepositoryContext.Set<Child>()
+                .Include(c => c.Doctors)
+                .ThenInclude(cd => cd.Doctor)
+                .SingleOrDefault(x => x.Id.Equals(id)).Doctors.Select(cd => cd.Doctor);
         }
 
         public Guid CreateChild(Child child)

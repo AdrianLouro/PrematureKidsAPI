@@ -7,5 +7,7 @@
         IUserRepository User { get; }
 
         IDoctorRepository Doctor { get; }
+
+        IChildRepository Child { get; }
     }
 }

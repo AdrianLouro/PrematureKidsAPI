@@ -35,7 +35,7 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetParentById(Guid id)
         {
-            _logger.LogInfo($"Returned parentUser with id: {id}");
+            _logger.LogInfo($"Returned parent with id: {id}");
             return Ok(HttpContext.Items["entity"] as Parent);
         }
 
@@ -54,7 +54,6 @@ namespace PrematureKidsAPI.Controllers
         {
             _logger.LogInfo($"Returned doctors for id: {id}");
             return Ok(_repository.Parent.GetDoctorsOfParent(id));
-            //return Ok((HttpContext.Items["entity"] as Parent).Children);
         }
 
         [HttpGet("{id}/user")]
@@ -64,7 +63,6 @@ namespace PrematureKidsAPI.Controllers
             _logger.LogInfo($"Returned user without details for id: {id}");
             return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Parent).Id));
         }
-
 
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -87,7 +85,6 @@ namespace PrematureKidsAPI.Controllers
             _repository.Parent.CreateParent(parent);
             return CreatedAtRoute("ParentById", new {id = parentUser.Id}, parent);
         }
-
 
         [HttpPut("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]

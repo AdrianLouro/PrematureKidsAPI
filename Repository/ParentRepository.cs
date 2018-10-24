@@ -50,7 +50,7 @@ namespace Repository
             var parent = GetParentById(id);
             return new ParentExtended(parent)
             {
-                Email = RepositoryContext.Users.Where((user) => user.Id == parent.Id).FirstOrDefault().Email
+                Email = RepositoryContext.Users.Where(user => user.Id == parent.Id).FirstOrDefault().Email
             };
         }
 

@@ -16,6 +16,8 @@ namespace Contracts
 
         IEnumerable<Child> GetPatientsOfDoctor(Guid id);
 
+        IEnumerable<Parent> GetParentsOfDoctor(Guid id);
+
         void CreateDoctor(Doctor doctor);
 
         void UpdateDoctor(Doctor dbDoctor, Doctor doctor);

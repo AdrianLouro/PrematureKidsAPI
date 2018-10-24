@@ -34,6 +34,17 @@ namespace Repository
                 .SingleOrDefault(x => x.Id.Equals(id)).Patients.Select(cd => cd.Child);
         }
 
+        public IEnumerable<Parent> GetParentsOfDoctor(Guid id)
+        {
+            return this.RepositoryContext.Set<Doctor>()
+                .Include(d => d.Patients)
+                .ThenInclude(cd => cd.Child)
+                .ThenInclude(c => c.Parents)
+                .ThenInclude(cp => cp.Parent)
+                .SingleOrDefault(x => x.Id.Equals(id)).Patients.Select(cd => cd.Child)
+                .Select(c => c.Parents.Select(cp => cp.Parent)).SelectMany(x => x).Distinct();
+        }
+
         public DoctorExtended GetDoctorWithDetails(Guid id)
         {
             var doctor = GetDoctorById(id);
