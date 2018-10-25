@@ -25,10 +25,15 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllParents()
+        public IActionResult GetAllParents(string idNumber)
         {
             _logger.LogInfo($"Returned all parents from database.");
-            return Ok(_repository.Parent.GetAllParents());
+            return Ok(idNumber == null
+                ? _repository.Parent.GetAllParents()
+                : _repository.Parent.FindByCondition(p =>
+                    String.Equals(p.IdNumber, idNumber, StringComparison.CurrentCultureIgnoreCase)
+                )
+            );
         }
 
         [HttpGet("{id}", Name = "ParentById")]
@@ -68,14 +73,14 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateParent([FromBody] ParentUser parentUser)
         {
-            var userId = _repository.User.CreateUser(new User(
+            Guid userId = _repository.User.CreateUser(new User(
                 parentUser.Id,
                 parentUser.Email,
                 Crypto.HashPassword(parentUser.Password),
                 parentUser.Role
             ));
 
-            var parent = new Parent(
+            Parent parent = new Parent(
                 userId,
                 parentUser.Name,
                 parentUser.IdNumber,

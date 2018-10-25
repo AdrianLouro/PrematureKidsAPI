@@ -9,5 +9,9 @@
         IDoctorRepository Doctor { get; }
 
         IChildRepository Child { get; }
+
+        IChildParentRepository ChildParent { get; }
+
+        IChildDoctorRepository ChildDoctor { get; }
     }
 }

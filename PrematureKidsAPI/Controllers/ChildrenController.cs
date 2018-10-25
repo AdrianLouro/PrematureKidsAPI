@@ -57,11 +57,28 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Child).Doctors);
         }
 
+        [HttpPost("{id}/parents/{parentId}")]
+        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        public IActionResult AddParent(Guid id, Guid parentId)
+        {
+            _repository.ChildParent.CreateChildParent(new ChildParent(id, parentId));
+            return NoContent();
+        }
+
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public IActionResult CreateChild([FromBody] Child child)
+        public IActionResult CreateChild([FromBody] ChildExtended childExtended)
         {
+            Child child = new Child(
+                childExtended.Id,
+                childExtended.Name,
+                childExtended.DateOfBirth,
+                childExtended.Gender
+            );
+
             _repository.Child.CreateChild(child);
+            _repository.ChildParent.CreateChildParent(new ChildParent(child.Id, childExtended.ParentId));
+
             return CreatedAtRoute("ChildById", new {id = child.Id}, child);
         }
 

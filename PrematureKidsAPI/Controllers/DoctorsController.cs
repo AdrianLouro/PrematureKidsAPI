@@ -64,18 +64,26 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Doctor.GetParentsOfDoctor(id));
         }
 
+        [HttpPost("{id}/patients/{patientId}")]
+        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        public IActionResult AddPatient(Guid id, Guid patientId)
+        {
+            _repository.ChildDoctor.CreateChildDoctor(new ChildDoctor(patientId, id));
+            return NoContent();
+        }
+
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateDoctor([FromBody] DoctorUser doctorUser)
         {
-            var userId = _repository.User.CreateUser(new User(
+            Guid userId = _repository.User.CreateUser(new User(
                 doctorUser.Id,
                 doctorUser.Email,
                 Crypto.HashPassword(doctorUser.Password),
                 doctorUser.Role
             ));
 
-            var doctor = new Doctor(
+            Doctor doctor = new Doctor(
                 userId,
                 doctorUser.Name,
                 doctorUser.BoardNumber,

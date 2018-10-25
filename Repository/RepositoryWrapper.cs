@@ -10,7 +10,8 @@ namespace Repository
         private IParentRepository _parent;
         private IDoctorRepository _doctor;
         private IChildRepository _child;
-
+        private IChildParentRepository _childParent;
+        private IChildDoctorRepository _childDoctor;
 
         public IParentRepository Parent
         {
@@ -61,6 +62,32 @@ namespace Repository
                 }
 
                 return _child;
+            }
+        }
+
+        public IChildParentRepository ChildParent
+        {
+            get
+            {
+                if (_childParent == null)
+                {
+                    _childParent = new ChildParentRepository(_repoContext);
+                }
+
+                return _childParent;
+            }
+        }
+
+        public IChildDoctorRepository ChildDoctor
+        {
+            get
+            {
+                if (_childDoctor == null)
+                {
+                    _childDoctor = new ChildDoctorRepository(_repoContext);
+                }
+
+                return _childDoctor;
             }
         }
 
