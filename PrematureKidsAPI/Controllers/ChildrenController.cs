@@ -92,7 +92,9 @@ namespace PrematureKidsAPI.Controllers
                 childExtended.MedicalHistoryId,
                 childExtended.Name,
                 childExtended.DateOfBirth,
-                childExtended.Gender
+                childExtended.Gender,
+                childExtended.WeeksOfPregnancy,
+                childExtended.MedicalHistory
             );
 
             _repository.Child.CreateChild(child);

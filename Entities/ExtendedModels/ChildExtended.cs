@@ -24,5 +24,11 @@ namespace Entities.ExtendedModels
 
         [Required(ErrorMessage = "Doctor ID is required")]
         public Guid DoctorId { get; set; }
+
+        [Required(ErrorMessage = "Weeks of pregnancy is required")]
+        public int WeeksOfPregnancy { get; set; }
+
+        [Required(ErrorMessage = "Medical history is required")]
+        public string MedicalHistory { get; set; }
     }
 }

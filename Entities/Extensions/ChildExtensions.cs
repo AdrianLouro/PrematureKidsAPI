@@ -10,6 +10,8 @@ namespace Entities.Extensions
             dbChild.Name = child.Name;
             dbChild.DateOfBirth = child.DateOfBirth;
             dbChild.Gender = child.Gender;
+            dbChild.WeeksOfPregnancy = child.WeeksOfPregnancy;
+            dbChild.MedicalHistory = child.MedicalHistory;
         }
     }
 }
