@@ -10,6 +10,9 @@ namespace Entities.ExtendedModels
     {
         public Guid Id { get; set; }
 
+        [Required(ErrorMessage = "Medical history ID is required")]
+        public string MedicalHistoryId { get; set; }
+
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
@@ -19,7 +22,7 @@ namespace Entities.ExtendedModels
         [Required(ErrorMessage = "Gender is required")]
         public string Gender { get; set; }
 
-        [Required(ErrorMessage = "Parent ID is required")]
-        public Guid ParentId { get; set; }
+        [Required(ErrorMessage = "Doctor ID is required")]
+        public Guid DoctorId { get; set; }
     }
 }

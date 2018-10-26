@@ -25,10 +25,16 @@ namespace PrematureKidsAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllChildren()
+        public IActionResult GetAllChildren(string medicalHistoryId)
         {
             _logger.LogInfo($"Returned all children from database.");
-            return Ok(_repository.Child.GetAllChildren());
+            return Ok(
+                medicalHistoryId == null
+                    ? _repository.Child.GetAllChildren()
+                    : _repository.Child.FindByCondition(p =>
+                        String.Equals(p.MedicalHistoryId, medicalHistoryId, StringComparison.CurrentCultureIgnoreCase)
+                    )
+            );
         }
 
         [HttpGet("{id}", Name = "ChildById")]
@@ -65,24 +71,37 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id}/parents/{parentId}")]
+        //[ServiceFilter(typeof(ValidationFilterAttribute))]
+        public IActionResult DeleteParent(Guid id, Guid parentId)
+        {
+            _repository.ChildParent.DeleteChildParent(
+                _repository.ChildParent.FindByCondition(cp => cp.ChildId == id && cp.ParentId == parentId)
+                    .SingleOrDefault()
+            );
+
+            return NoContent();
+        }
+
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateChild([FromBody] ChildExtended childExtended)
         {
             Child child = new Child(
                 childExtended.Id,
+                childExtended.MedicalHistoryId,
                 childExtended.Name,
                 childExtended.DateOfBirth,
                 childExtended.Gender
             );
 
             _repository.Child.CreateChild(child);
-            _repository.ChildParent.CreateChildParent(new ChildParent(child.Id, childExtended.ParentId));
+            _repository.ChildDoctor.CreateChildDoctor(new ChildDoctor(child.Id, childExtended.DoctorId));
 
             return CreatedAtRoute("ChildById", new {id = child.Id}, child);
         }
 
-        [HttpPut("{id}"), Authorize(Roles = "parent")]
+        [HttpPut("{id}"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult UpdateChild(Guid id, [FromBody] Child child)

@@ -28,11 +28,12 @@ namespace PrematureKidsAPI.Controllers
         public IActionResult GetAllParents(string idNumber)
         {
             _logger.LogInfo($"Returned all parents from database.");
-            return Ok(idNumber == null
-                ? _repository.Parent.GetAllParents()
-                : _repository.Parent.FindByCondition(p =>
-                    String.Equals(p.IdNumber, idNumber, StringComparison.CurrentCultureIgnoreCase)
-                )
+            return Ok(
+                idNumber == null
+                    ? _repository.Parent.GetAllParents()
+                    : _repository.Parent.FindByCondition(p =>
+                        String.Equals(p.IdNumber, idNumber, StringComparison.CurrentCultureIgnoreCase)
+                    )
             );
         }
 

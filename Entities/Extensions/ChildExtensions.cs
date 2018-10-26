@@ -6,6 +6,7 @@ namespace Entities.Extensions
     {
         public static void Map(this Child dbChild, Child child)
         {
+            dbChild.MedicalHistoryId = child.MedicalHistoryId;
             dbChild.Name = child.Name;
             dbChild.DateOfBirth = child.DateOfBirth;
             dbChild.Gender = child.Gender;

@@ -12,6 +12,11 @@ namespace Entities.Models
     {
         [Key] [Column("id")] public Guid Id { get; set; }
 
+        [Column("medical_history_id")]
+        [Required(ErrorMessage = "Medical history ID is required")]
+        [StringLength(255, ErrorMessage = "Medical history ID can't be longer than 255 characters")]
+        public string MedicalHistoryId { get; set; }
+
         [Column("name")]
         [Required(ErrorMessage = "Name is required")]
         [StringLength(255, ErrorMessage = "Name can't be longer than 255 characters")]
@@ -26,15 +31,14 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Gender cannot be longer then 255 characters")]
         public string Gender { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<ChildParent> Parents { get; set; } = new List<ChildParent>();
+        [JsonIgnore] public virtual IEnumerable<ChildParent> Parents { get; set; } = new List<ChildParent>();
 
-        [JsonIgnore]
-        public virtual IEnumerable<ChildDoctor> Doctors { get; set; } = new List<ChildDoctor>();
+        [JsonIgnore] public virtual IEnumerable<ChildDoctor> Doctors { get; set; } = new List<ChildDoctor>();
 
-        public Child(Guid id, string name, DateTime dateOfBirth, string gender)
+        public Child(Guid id, string medicalHistoryId, string name, DateTime dateOfBirth, string gender)
         {
             Id = id;
+            MedicalHistoryId = medicalHistoryId;
             Name = name;
             DateOfBirth = dateOfBirth;
             Gender = gender;
