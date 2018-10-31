@@ -64,6 +64,14 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Doctor.GetParentsOfDoctor(id));
         }
 
+        [HttpGet("{id}/exercises")]
+        //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
+        public IActionResult GerExercises(Guid id)
+        {
+            _logger.LogInfo($"Returned exercises for id: {id}");
+            return Ok(_repository.Exercise.GetDoctorExercises(id));
+        }
+
         [HttpPost("{id}/patients/{patientId}")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddPatient(Guid id, Guid patientId)

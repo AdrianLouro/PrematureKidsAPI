@@ -20,6 +20,10 @@ namespace Entities
 
         public DbSet<ChildDoctor> ChildrenDoctors { get; set; }
 
+        public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Exercise> Exercises { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }

@@ -11,7 +11,11 @@
         IChildRepository Child { get; }
 
         IChildParentRepository ChildParent { get; }
-
+         
         IChildDoctorRepository ChildDoctor { get; }
+
+        ICategoryRepository Category{ get; }
+
+        IExerciseRepository Exercise { get; }
     }
 }

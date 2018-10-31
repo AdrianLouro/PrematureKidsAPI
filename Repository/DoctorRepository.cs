@@ -50,7 +50,7 @@ namespace Repository
             var doctor = GetDoctorById(id);
             return new DoctorExtended(doctor)
             {
-                Email = RepositoryContext.Users.Where((user) => user.Id == doctor.Id).FirstOrDefault().Email
+                Email = RepositoryContext.Users.FirstOrDefault(user => user.Id == doctor.Id).Email
             };
         }
 

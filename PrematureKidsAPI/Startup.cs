@@ -46,6 +46,8 @@ namespace PrematureKidsAPI
             services.AddScoped<ValidateEntityExistsAttribute<Parent>>();
             services.AddScoped<ValidateEntityExistsAttribute<Doctor>>();
             services.AddScoped<ValidateEntityExistsAttribute<Child>>();
+            services.AddScoped<ValidateEntityExistsAttribute<Category>>();
+            services.AddScoped<ValidateEntityExistsAttribute<Exercise>>();
 
             services.AddMvc(config =>
                 {

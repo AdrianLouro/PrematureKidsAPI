@@ -23,7 +23,7 @@ namespace Repository
 
         public Child GetChildById(Guid id)
         {
-            return FindByCondition((child) => child.Id.Equals((id))).FirstOrDefault();
+            return FindByCondition(child => child.Id.Equals((id))).FirstOrDefault();
         }
 
         public IEnumerable<Parent> GetParentsOfChild(Guid id)

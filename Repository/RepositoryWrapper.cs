@@ -12,6 +12,8 @@ namespace Repository
         private IChildRepository _child;
         private IChildParentRepository _childParent;
         private IChildDoctorRepository _childDoctor;
+        private ICategoryRepository _category;
+        private IExerciseRepository _exercise;
 
         public IParentRepository Parent
         {
@@ -88,6 +90,32 @@ namespace Repository
                 }
 
                 return _childDoctor;
+            }
+        }
+
+        public ICategoryRepository Category
+        {
+            get
+            {
+                if (_category == null)
+                {
+                    _category = new CategoryRepository(_repoContext);
+                }
+
+                return _category;
+            }
+        }
+
+        public IExerciseRepository Exercise
+        {
+            get
+            {
+                if (_exercise == null)
+                {
+                    _exercise = new ExerciseRepository(_repoContext);
+                }
+
+                return _exercise;
             }
         }
 
