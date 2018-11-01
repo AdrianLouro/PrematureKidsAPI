@@ -14,6 +14,7 @@ namespace Repository
         private IChildDoctorRepository _childDoctor;
         private ICategoryRepository _category;
         private IExerciseRepository _exercise;
+        private IOpinionRepository _opinion;
 
         public IParentRepository Parent
         {
@@ -116,6 +117,19 @@ namespace Repository
                 }
 
                 return _exercise;
+            }
+        }
+
+        public IOpinionRepository Opinion
+        {
+            get
+            {
+                if (_opinion == null)
+                {
+                    _opinion = new OpinionRepository(_repoContext);
+                }
+
+                return _opinion;
             }
         }
 

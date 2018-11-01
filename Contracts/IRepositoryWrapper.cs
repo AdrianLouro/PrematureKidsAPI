@@ -17,5 +17,7 @@
         ICategoryRepository Category{ get; }
 
         IExerciseRepository Exercise { get; }
+
+        IOpinionRepository Opinion { get; }
     }
 }

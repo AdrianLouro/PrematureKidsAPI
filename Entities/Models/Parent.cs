@@ -27,8 +27,9 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Telephone cannot be longer then 255 characters")]
         public string Telephone { get; set; }
 
-        [JsonIgnore]
-        public virtual IEnumerable<ChildParent> Children { get; set; } = new List<ChildParent>();
+        [JsonIgnore] public virtual IEnumerable<ChildParent> Children { get; set; } = new List<ChildParent>();
+
+        [JsonIgnore] public virtual IEnumerable<Opinion> Opinions { get; set; } = new List<Opinion>();
 
         public Parent(Guid id, string name, string idNumber, string telephone)
         {

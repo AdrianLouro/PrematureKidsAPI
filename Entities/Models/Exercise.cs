@@ -33,6 +33,8 @@ namespace Entities.Models
         //[JsonIgnore]
         public virtual Doctor Doctor { get; set; }
 
+        [JsonIgnore] public virtual IEnumerable<Opinion> Opinions { get; set; } = new List<Opinion>();
+
         public Exercise(Guid id, string title, Guid categoryId, Guid doctorId)
         {
             Id = id;

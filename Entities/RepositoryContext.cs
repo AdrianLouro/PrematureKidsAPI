@@ -24,6 +24,8 @@ namespace Entities
 
         public DbSet<Exercise> Exercises { get; set; }
 
+        public DbSet<Opinion> Opinions { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }
