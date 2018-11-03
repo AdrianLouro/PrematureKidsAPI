@@ -44,6 +44,8 @@ namespace Entities.Models
 
         [JsonIgnore] public virtual IEnumerable<ChildDoctor> Doctors { get; set; } = new List<ChildDoctor>();
 
+        [JsonIgnore] public virtual IEnumerable<Assignment> Assignments { get; set; } = new List<Assignment>();
+
         public Child(Guid id, string medicalHistoryId, string name, DateTime dateOfBirth, string gender,
             int weeksOfPregnancy, string medicalHistory)
         {

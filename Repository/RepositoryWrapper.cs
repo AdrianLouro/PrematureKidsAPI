@@ -15,6 +15,8 @@ namespace Repository
         private ICategoryRepository _category;
         private IExerciseRepository _exercise;
         private IOpinionRepository _opinion;
+        private IAssignmentRepository _assignment;
+        private ISessionRepository _session;
 
         public IParentRepository Parent
         {
@@ -130,6 +132,32 @@ namespace Repository
                 }
 
                 return _opinion;
+            }
+        }
+
+        public IAssignmentRepository Assignment
+        {
+            get
+            {
+                if (_assignment == null)
+                {
+                    _assignment = new AssignmentRepository(_repoContext);
+                }
+
+                return _assignment;
+            }
+        }
+
+        public ISessionRepository Session
+        {
+            get
+            {
+                if (_session == null)
+                {
+                    _session = new SessionRepository(_repoContext);
+                }
+
+                return _session;
             }
         }
 

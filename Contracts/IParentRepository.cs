@@ -16,6 +16,8 @@ namespace Contracts
 
         IEnumerable<Doctor> GetDoctorsOfParent(Guid id);
 
+        IEnumerable<Assignment> GetAssignmentsOfParent(Guid id);
+
         ParentExtended GetParentWithDetails(Guid id);
 
         Guid CreateParent(Parent parent);

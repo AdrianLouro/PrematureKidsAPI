@@ -26,6 +26,10 @@ namespace Entities
 
         public DbSet<Opinion> Opinions { get; set; }
 
+        public DbSet<Assignment> Assignments { get; set; }
+
+        public DbSet<Session> Sessions { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }

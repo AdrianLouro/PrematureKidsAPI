@@ -19,5 +19,9 @@
         IExerciseRepository Exercise { get; }
 
         IOpinionRepository Opinion { get; }
+
+        IAssignmentRepository Assignment { get; }
+
+        ISessionRepository Session { get; }
     }
 }

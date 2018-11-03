@@ -45,6 +45,21 @@ namespace Repository
                 .Select(c => c.Doctors.Select(cd => cd.Doctor)).SelectMany(x => x).Distinct();
         }
 
+        public IEnumerable<Assignment> GetAssignmentsOfParent(Guid id)
+        {
+            return this.RepositoryContext.Set<Parent>()
+                .Include(p => p.Children)
+                .ThenInclude(cp => cp.Child)
+                .ThenInclude(c => c.Assignments)
+                .ThenInclude(a => a.Exercise)
+                .Include(p => p.Children)
+                .ThenInclude(cp => cp.Child)
+                .ThenInclude(c => c.Assignments)
+                .ThenInclude(a => a.Doctor)
+                .SingleOrDefault(x => x.Id.Equals(id)).Children.Select(cp => cp.Child)
+                .Select(c => c.Assignments).SelectMany(x => x);
+        }
+
         public ParentExtended GetParentWithDetails(Guid id)
         {
             var parent = GetParentById(id);

@@ -14,7 +14,7 @@ namespace Entities.Models
 
         [Column("text")]
         [Required(ErrorMessage = "Text is required")]
-        [StringLength(65535, ErrorMessage = "Text can't be longer than 255 characters")]
+        [StringLength(65535, ErrorMessage = "Text can't be longer than 65535 characters")]
         public string Text { get; set; }
 
         [JsonIgnore]

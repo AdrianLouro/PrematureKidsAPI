@@ -62,6 +62,14 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Parent.GetDoctorsOfParent(id));
         }
 
+        [HttpGet("{id}/assignments")]
+        //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
+        public IActionResult GetAssignments(Guid id)
+        {
+            _logger.LogInfo($"Returned assignments for id: {id}");
+            return Ok(_repository.Parent.GetAssignmentsOfParent(id));
+        }
+
         [HttpGet("{id}/user")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetUserWithoutDetails(Guid id)
