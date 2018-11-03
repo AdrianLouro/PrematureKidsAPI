@@ -19,9 +19,10 @@ namespace Repository
         public IEnumerable<Assignment> GetAllAssignments()
         {
             return this.RepositoryContext.Set<Assignment>()
-                .Include(assignment => assignment.Exercise)
                 .Include(assignment => assignment.Doctor)
                 .Include(assignment => assignment.Child)
+                .Include(assignment => assignment.Exercise)
+                .ThenInclude(exercise => exercise.Category)
                 .OrderByDescending(assignment => assignment.Date);
         }
 
