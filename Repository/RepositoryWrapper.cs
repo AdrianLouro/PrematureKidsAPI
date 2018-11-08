@@ -17,6 +17,7 @@ namespace Repository
         private IOpinionRepository _opinion;
         private IAssignmentRepository _assignment;
         private ISessionRepository _session;
+        private IAdministratorRepository _administrator;
 
         public IParentRepository Parent
         {
@@ -158,6 +159,19 @@ namespace Repository
                 }
 
                 return _session;
+            }
+        }
+
+        public IAdministratorRepository Administrator
+        {
+            get
+            {
+                if (_administrator == null)
+                {
+                    _administrator = new AdministratorRepository(_repoContext);
+                }
+
+                return _administrator;
             }
         }
 

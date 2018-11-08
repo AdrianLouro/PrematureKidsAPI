@@ -30,6 +30,8 @@ namespace Entities
 
         public DbSet<Session> Sessions { get; set; }
 
+        public DbSet<Administrator> Administrators { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }

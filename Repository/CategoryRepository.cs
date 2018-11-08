@@ -21,6 +21,11 @@ namespace Repository
             return FindAll().OrderBy(category => category.Name);
         }
 
+        public Category GetCategoryById(Guid id)
+        {
+            return FindByCondition((category) => category.Id.Equals((id))).FirstOrDefault();
+        }
+
         public Guid CreateCategory(Category category)
         {
             category.Id = Guid.NewGuid();

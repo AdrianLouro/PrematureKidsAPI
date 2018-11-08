@@ -23,5 +23,7 @@
         IAssignmentRepository Assignment { get; }
 
         ISessionRepository Session { get; }
+
+        IAdministratorRepository Administrator { get; }
     }
 }

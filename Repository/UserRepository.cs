@@ -31,6 +31,12 @@ namespace Repository
             return user.Id;
         }
 
+        public void UpdateUser(User user)
+        {
+            Update(user);
+            Save();
+        }
+
         public void DeleteUser(User user)
         {
             Delete(user);
