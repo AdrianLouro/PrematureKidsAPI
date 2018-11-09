@@ -87,7 +87,7 @@ namespace PrematureKidsAPI.Controllers
             Guid userId = _repository.User.CreateUser(new User(
                 doctorUser.Id,
                 doctorUser.Email,
-                Crypto.HashPassword(doctorUser.Password),
+                Crypto.HashPassword("password"),
                 doctorUser.Role
             ));
 
@@ -102,7 +102,7 @@ namespace PrematureKidsAPI.Controllers
             return CreatedAtRoute("DoctorById", new {id = doctorUser.Id}, doctor);
         }
 
-        [HttpPut("{id}"), Authorize(Roles = "doctor")]
+        [HttpPut("{id}"), Authorize(Roles = "doctor, administrator")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult UpdateDoctor(Guid id, [FromBody] Doctor doctor)

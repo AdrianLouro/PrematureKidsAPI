@@ -24,6 +24,15 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
+        [HttpGet("{id}", Name = "UserById")]
+        [Authorize]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<User>))]
+        public IActionResult GetUserById(Guid id)
+        {
+            _logger.LogInfo($"Returned user with id: {id}");
+            return Ok(HttpContext.Items["entity"] as User);
+        }
+
         [HttpPut("{id}")]
         [Authorize]
         [ServiceFilter(typeof(ValidationFilterAttribute))]

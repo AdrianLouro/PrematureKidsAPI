@@ -43,6 +43,8 @@ namespace PrematureKidsAPI
             services.ConfigureAuthenticationService();
             services.AddScoped<ValidationFilterAttribute>();
 
+            services.AddScoped<ValidateEntityExistsAttribute<User>>();
+            services.AddScoped<ValidateEntityExistsAttribute<Administrator>>();
             services.AddScoped<ValidateEntityExistsAttribute<Parent>>();
             services.AddScoped<ValidateEntityExistsAttribute<Doctor>>();
             services.AddScoped<ValidateEntityExistsAttribute<Child>>();
@@ -51,7 +53,6 @@ namespace PrematureKidsAPI
             services.AddScoped<ValidateEntityExistsAttribute<Opinion>>();
             services.AddScoped<ValidateEntityExistsAttribute<Assignment>>();
             services.AddScoped<ValidateEntityExistsAttribute<Session>>();
-            services.AddScoped<ValidateEntityExistsAttribute<Administrator>>();
 
             services.AddMvc(config =>
                 {
