@@ -7,6 +7,7 @@ namespace Entities.Extensions
         public static void Map(this Exercise dbExercise, Exercise exercise)
         {
             dbExercise.Title = exercise.Title;
+            dbExercise.Description = exercise.Description;
             dbExercise.CategoryId = exercise.CategoryId;
         }
     }

@@ -17,6 +17,11 @@ namespace Entities.Models
         [StringLength(255, ErrorMessage = "Title can't be longer than 255 characters")]
         public string Title { get; set; }
 
+        [Column("description")]
+        [Required(ErrorMessage = "Description is required")]
+        [StringLength(65535, ErrorMessage = "Description can't be longer than 65535 characters")]
+        public string Description { get; set; }
+
         [JsonIgnore]
         [Column("category")]
         [Required(ErrorMessage = "Category ID is required")]
@@ -38,10 +43,11 @@ namespace Entities.Models
         [JsonIgnore]
         public virtual IEnumerable<ExerciseAttachment> Attachments { get; set; } = new List<ExerciseAttachment>();
 
-        public Exercise(Guid id, string title, Guid categoryId, Guid doctorId)
+        public Exercise(Guid id, string title, string description, Guid categoryId, Guid doctorId)
         {
             Id = id;
             Title = title;
+            Description = description;
             CategoryId = categoryId;
             DoctorId = doctorId;
         }
