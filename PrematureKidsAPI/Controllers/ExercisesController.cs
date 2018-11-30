@@ -51,6 +51,22 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Opinion.GetExerciseOpinions((HttpContext.Items["entity"] as Exercise).Id));
         }
 
+        [HttpGet("{id}/videos")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
+        public IActionResult GetVideos(Guid id)
+        {
+            _logger.LogInfo($"Returned videos for id: {id}");
+            return Ok(_repository.ExerciseAttachment.GetExerciseVideos((HttpContext.Items["entity"] as Exercise).Id));
+        }
+
+        [HttpGet("{id}/images")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
+        public IActionResult GetImages(Guid id)
+        {
+            _logger.LogInfo($"Returned images for id: {id}");
+            return Ok(_repository.ExerciseAttachment.GetExerciseImages((HttpContext.Items["entity"] as Exercise).Id));
+        }
+
         [HttpPost]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateExercise([FromBody] Exercise exercise)

@@ -35,6 +35,9 @@ namespace Entities.Models
 
         [JsonIgnore] public virtual IEnumerable<Opinion> Opinions { get; set; } = new List<Opinion>();
 
+        [JsonIgnore]
+        public virtual IEnumerable<ExerciseAttachment> Attachments { get; set; } = new List<ExerciseAttachment>();
+
         public Exercise(Guid id, string title, Guid categoryId, Guid doctorId)
         {
             Id = id;

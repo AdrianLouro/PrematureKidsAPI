@@ -11,10 +11,10 @@
         IChildRepository Child { get; }
 
         IChildParentRepository ChildParent { get; }
-         
+
         IChildDoctorRepository ChildDoctor { get; }
 
-        ICategoryRepository Category{ get; }
+        ICategoryRepository Category { get; }
 
         IExerciseRepository Exercise { get; }
 
@@ -25,5 +25,9 @@
         ISessionRepository Session { get; }
 
         IAdministratorRepository Administrator { get; }
+
+        IExerciseAttachmentRepository ExerciseAttachment { get; }
+
+        ISessionAttachmentRepository SessionAttachment { get; }
     }
 }

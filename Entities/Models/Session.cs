@@ -41,6 +41,9 @@ namespace Entities.Models
         //[JsonIgnore]
         public virtual Parent Parent { get; set; }
 
+        [JsonIgnore]
+        public virtual IEnumerable<SessionAttachment> Attachments { get; set; } = new List<SessionAttachment>();
+
         public Session(Guid id, DateTime date, string parentNotes, string doctorNotes, Guid assignmentId, Guid parentId)
         {
             Id = id;

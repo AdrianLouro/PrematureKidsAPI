@@ -18,6 +18,8 @@ namespace Repository
         private IAssignmentRepository _assignment;
         private ISessionRepository _session;
         private IAdministratorRepository _administrator;
+        private IExerciseAttachmentRepository _exerciseAttachment;
+        private ISessionAttachmentRepository _sessionAttachment;
 
         public IParentRepository Parent
         {
@@ -172,6 +174,32 @@ namespace Repository
                 }
 
                 return _administrator;
+            }
+        }
+
+        public IExerciseAttachmentRepository ExerciseAttachment
+        {
+            get
+            {
+                if (_exerciseAttachment == null)
+                {
+                    _exerciseAttachment = new ExerciseAttachmentRepository(_repoContext);
+                }
+
+                return _exerciseAttachment;
+            }
+        }
+
+        public ISessionAttachmentRepository SessionAttachment
+        {
+            get
+            {
+                if (_sessionAttachment == null)
+                {
+                    _sessionAttachment = new SessionAttachmentRepository(_repoContext);
+                }
+
+                return _sessionAttachment;
             }
         }
 

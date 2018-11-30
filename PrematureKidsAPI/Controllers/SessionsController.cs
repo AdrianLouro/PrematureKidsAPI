@@ -31,6 +31,22 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Session.GetAllSessions());
         }
 
+        [HttpGet("{id}/videos")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
+        public IActionResult GetVideos(Guid id)
+        {
+            _logger.LogInfo($"Returned videos for id: {id}");
+            return Ok(_repository.SessionAttachment.GetSessionVideos((HttpContext.Items["entity"] as Session).Id));
+        }
+
+        [HttpGet("{id}/images")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
+        public IActionResult GetImages(Guid id)
+        {
+            _logger.LogInfo($"Returned images for id: {id}");
+            return Ok(_repository.SessionAttachment.GetSessionImages((HttpContext.Items["entity"] as Session).Id));
+        }
+
         [HttpGet("{id}", Name = "SessionById")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
         public IActionResult GetSessionById(Guid id)

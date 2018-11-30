@@ -32,6 +32,10 @@ namespace Entities
 
         public DbSet<Administrator> Administrators { get; set; }
 
+        public DbSet<ExerciseAttachment> ExerciseAttachments { get; set; }
+
+        public DbSet<SessionAttachment> SessionAttachments { get; set; }
+
         public RepositoryContext(DbContextOptions options) : base(options)
         {
         }
