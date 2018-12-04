@@ -45,7 +45,7 @@ namespace Repository
 
         public Guid CreateSessionAttachment(SessionAttachment session)
         {
-            session.Id = Guid.NewGuid();
+            //session.Id = Guid.NewGuid();
             Create(session);
             Save();
             return session.Id;

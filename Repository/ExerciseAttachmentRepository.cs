@@ -45,7 +45,7 @@ namespace Repository
 
         public Guid CreateExerciseAttachment(ExerciseAttachment exercise)
         {
-            exercise.Id = Guid.NewGuid();
+            //exercise.Id = Guid.NewGuid();
             Create(exercise);
             Save();
             return exercise.Id;

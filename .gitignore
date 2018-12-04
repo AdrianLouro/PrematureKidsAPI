@@ -262,3 +262,4 @@ __pycache__/
 
 # My files
 PrematureKidsAPI/logs/
+PrematureKidsAPI/wwwroot/uploads/
