@@ -20,14 +20,11 @@ namespace PrematureKidsAPI.Controllers
     {
         private ILoggerManager _logger;
         private IRepositoryWrapper _repository;
-        private IHostingEnvironment _environment;
 
-        public ExercisesAttachmentsController(ILoggerManager logger, IRepositoryWrapper repository,
-            IHostingEnvironment environment)
+        public ExercisesAttachmentsController(ILoggerManager logger, IRepositoryWrapper repository)
         {
             _logger = logger;
             _repository = repository;
-            _environment = environment;
         }
 
         [HttpGet("{id}", Name = "ExerciseAttachmentById")]
@@ -43,8 +40,7 @@ namespace PrematureKidsAPI.Controllers
         {
             Guid guid = Guid.NewGuid();
 
-            string uploadsDirectory =
-                Path.Combine(Path.Combine(_environment.WebRootPath, "uploads"), "exercises");
+            string uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "exercises");
 
             if (!Directory.Exists(uploadsDirectory))
             {
@@ -52,7 +48,8 @@ namespace PrematureKidsAPI.Controllers
             }
 
             using (var stream = new FileStream(
-                Path.Combine(uploadsDirectory, guid + Path.GetExtension(file.FileName)),
+                //Path.Combine(uploadsDirectory, guid + Path.GetExtension(file.FileName)),
+                Path.Combine(uploadsDirectory, guid + (Request.Form["type"].Equals("video") ? ".mp4" : ".png")),
                 FileMode.Create)
             )
             {
@@ -61,7 +58,7 @@ namespace PrematureKidsAPI.Controllers
 
             ExerciseAttachment exerciseAttachment = new ExerciseAttachment(
                 guid,
-                Request.Form["name"],
+                Request.Form["name"] + (Request.Form["type"].Equals("video") ? ".mp4" : ".png"),
                 Request.Form["type"],
                 new Guid(Request.Form["exerciseId"])
             );
@@ -78,6 +75,13 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<ExerciseAttachment>))]
         public IActionResult DeleteExerciseAttachment(Guid id)
         {
+            System.IO.File.Delete(
+                Path.Combine(
+                    Directory.GetCurrentDirectory(), "wwwroot", "uploads", "exercises",
+                    id + ((HttpContext.Items["entity"] as ExerciseAttachment).Type.Equals("video") ? ".mp4" : ".png")
+                )
+            );
+
             _repository.ExerciseAttachment.DeleteExerciseAttachment(
                 (HttpContext.Items["entity"] as ExerciseAttachment));
             return NoContent();

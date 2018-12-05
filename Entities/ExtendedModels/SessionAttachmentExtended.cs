@@ -27,7 +27,7 @@ namespace Entities.ExtendedModels
             Name = sessionAttachment.Name;
             Type = sessionAttachment.Type;
             SessionId = sessionAttachment.SessionId;
-            FullPath = "http://192.168.1.10:5000/uploads/sessions/" + Id;
+            FullPath = "http://192.168.1.10:5000/uploads/sessions/" + Id + (Type.Equals("video") ? ".mp4" : ".png");
         }
     }
 }

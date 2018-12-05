@@ -27,7 +27,7 @@ namespace Entities.ExtendedModels
             Name = exerciseAttachment.Name;
             Type = exerciseAttachment.Type;
             ExerciseId = exerciseAttachment.ExerciseId;
-            FullPath = "http://192.168.1.10:5000/uploads/exercises/" + Id;
+            FullPath = "http://192.168.1.10:5000/uploads/exercises/" + Id + (Type.Equals("video") ? ".mp4" : ".png");
         }
     }
 }

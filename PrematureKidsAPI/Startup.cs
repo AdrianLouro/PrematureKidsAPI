@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog;
@@ -95,7 +96,14 @@ namespace PrematureKidsAPI
             });
             app.UseAuthentication();
             app.ConfigureCustomExceptionMiddleware();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider =
+                    new PhysicalFileProvider(
+                        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")
+                    ),
+                RequestPath = "/uploads"
+            });
             app.UseHttpsRedirection();
             app.UseMvc();
         }

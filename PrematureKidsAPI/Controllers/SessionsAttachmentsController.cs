@@ -20,14 +20,11 @@ namespace PrematureKidsAPI.Controllers
     {
         private ILoggerManager _logger;
         private IRepositoryWrapper _repository;
-        private IHostingEnvironment _environment;
 
-        public SessionsAttachmentsController(ILoggerManager logger, IRepositoryWrapper repository,
-            IHostingEnvironment environment)
+        public SessionsAttachmentsController(ILoggerManager logger, IRepositoryWrapper repository)
         {
             _logger = logger;
             _repository = repository;
-            _environment = environment;
         }
 
         [HttpGet("{id}", Name = "SessionAttachmentById")]
@@ -43,8 +40,7 @@ namespace PrematureKidsAPI.Controllers
         {
             Guid guid = Guid.NewGuid();
 
-            string uploadsDirectory =
-                Path.Combine(Path.Combine(_environment.WebRootPath, "uploads"), "sessions");
+            string uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "sessions");
 
             if (!Directory.Exists(uploadsDirectory))
             {
@@ -52,7 +48,8 @@ namespace PrematureKidsAPI.Controllers
             }
 
             using (var stream = new FileStream(
-                Path.Combine(uploadsDirectory, guid + Path.GetExtension(file.FileName)),
+                //Path.Combine(uploadsDirectory, guid + Path.GetExtension(file.FileName)),
+                Path.Combine(uploadsDirectory, guid + (Request.Form["type"].Equals("video") ? ".mp4" : ".png")),
                 FileMode.Create)
             )
             {
@@ -61,7 +58,7 @@ namespace PrematureKidsAPI.Controllers
 
             SessionAttachment sessionAttachment = new SessionAttachment(
                 guid,
-                Request.Form["name"],
+                Request.Form["name"] + (Request.Form["type"].Equals("video") ? ".mp4" : ".png"),
                 Request.Form["type"],
                 new Guid(Request.Form["sessionId"])
             );
@@ -78,6 +75,13 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<SessionAttachment>))]
         public IActionResult DeleteSessionAttachment(Guid id)
         {
+            System.IO.File.Delete(
+                Path.Combine(
+                    Directory.GetCurrentDirectory(), "wwwroot", "uploads", "sessions",
+                    id + ((HttpContext.Items["entity"] as SessionAttachment).Type.Equals("video") ? ".mp4" : ".png")
+                )
+            );
+
             _repository.SessionAttachment.DeleteSessionAttachment(
                 (HttpContext.Items["entity"] as SessionAttachment));
             return NoContent();
