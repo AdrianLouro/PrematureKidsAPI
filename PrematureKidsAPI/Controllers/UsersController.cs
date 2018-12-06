@@ -38,7 +38,6 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult UpdateUser(Guid id, [FromBody] EditedUser editedUser)
         {
-
             User user = _repository.User.GetUserById(id);
 
             if (!Crypto.VerifyHashedPassword(user.Password, editedUser.CurrentPassword))
@@ -46,13 +45,16 @@ namespace PrematureKidsAPI.Controllers
                 return BadRequest();
             }
 
+            if (_repository.User.FindByCondition( u => u.Email.Equals(editedUser.Email) && !u.Id.Equals(id)).Any())
+                return Conflict("email");
+
             user.Email = editedUser.Email;
 
             if (!string.IsNullOrEmpty(editedUser.NewPassword))
             {
                 user.Password = Crypto.HashPassword(editedUser.NewPassword);
             }
-            
+
             _repository.User.UpdateUser(user);
             return NoContent();
         }

@@ -76,6 +76,11 @@ namespace PrematureKidsAPI.Controllers
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddParent(Guid id, Guid parentId)
         {
+            if (_repository.ChildParent.FindByCondition(
+                childParent => childParent.ChildId.Equals(id) && childParent.ParentId.Equals(parentId)
+            ).Any())
+                return Conflict("The parent is already associated");
+
             _repository.ChildParent.CreateChildParent(new ChildParent(id, parentId));
             return NoContent();
         }
@@ -96,6 +101,9 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateChild([FromBody] ChildExtended childExtended)
         {
+            if (_repository.Child.FindByCondition(c => c.MedicalHistoryId.Equals(childExtended.MedicalHistoryId)).Any())
+                return Conflict("medicalHistoryId");
+
             Child child = new Child(
                 childExtended.Id,
                 childExtended.MedicalHistoryId,
@@ -117,6 +125,11 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult UpdateChild(Guid id, [FromBody] Child child)
         {
+            if (_repository.Child.FindByCondition(
+                c => c.MedicalHistoryId.Equals(child.MedicalHistoryId) && !c.Id.Equals(id)
+            ).Any())
+                return Conflict("medicalHistoryId");
+
             _repository.Child.UpdateChild(HttpContext.Items["entity"] as Child, child);
             return NoContent();
         }

@@ -76,6 +76,11 @@ namespace PrematureKidsAPI.Controllers
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddPatient(Guid id, Guid patientId)
         {
+            if (_repository.ChildDoctor.FindByCondition(
+                childDoctor => childDoctor.ChildId.Equals(patientId) && childDoctor.DoctorId.Equals(id)
+            ).Any())
+                return Conflict("The patient is already associated");
+
             _repository.ChildDoctor.CreateChildDoctor(new ChildDoctor(patientId, id));
             return NoContent();
         }
@@ -84,6 +89,12 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateDoctor([FromBody] DoctorUser doctorUser)
         {
+            if (_repository.User.FindByCondition(user => user.Email.Equals(doctorUser.Email)).Any())
+                return Conflict("email");
+
+            if (_repository.Doctor.FindByCondition(d => d.BoardNumber.Equals(doctorUser.BoardNumber)).Any())
+                return Conflict("boardNumber");
+
             Guid userId = _repository.User.CreateUser(new User(
                 doctorUser.Id,
                 doctorUser.Email,
@@ -107,6 +118,11 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult UpdateDoctor(Guid id, [FromBody] Doctor doctor)
         {
+            if (_repository.Doctor.FindByCondition(
+                d => d.BoardNumber.Equals(doctor.BoardNumber) && !d.Id.Equals(id)
+            ).Any())
+                return Conflict("boardNumber");
+
             _repository.Doctor.UpdateDoctor(HttpContext.Items["entity"] as Doctor, doctor);
             return NoContent();
         }

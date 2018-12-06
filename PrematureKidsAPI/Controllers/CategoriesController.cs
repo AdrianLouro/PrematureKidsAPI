@@ -51,6 +51,9 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateCategory([FromBody] Category category)
         {
+            if (_repository.Category.FindByCondition(c => c.Name.Equals(category.Name)).Any())
+                return Conflict("name");
+
             _repository.Category.CreateCategory(category);
             return CreatedAtRoute("CategoryById", new {id = category.Id}, category);
         }
@@ -60,6 +63,9 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Category>))]
         public IActionResult UpdateCategory(Guid id, [FromBody] Category category)
         {
+            if (_repository.Category.FindByCondition(c => c.Name.Equals(category.Name) && !c.Id.Equals(id)).Any())
+                return Conflict("name");
+
             _repository.Category.UpdateCategory(HttpContext.Items["entity"] as Category, category);
             return NoContent();
         }

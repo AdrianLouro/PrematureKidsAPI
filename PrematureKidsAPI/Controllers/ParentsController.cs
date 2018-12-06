@@ -82,6 +82,12 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateParent([FromBody] ParentUser parentUser)
         {
+            if (_repository.User.FindByCondition(user => user.Email.Equals(parentUser.Email)).Any())
+                return Conflict("email");
+
+            if (_repository.Parent.FindByCondition(p => p.IdNumber.Equals(parentUser.IdNumber)).Any())
+                return Conflict("idNumber");
+
             Guid userId = _repository.User.CreateUser(new User(
                 parentUser.Id,
                 parentUser.Email,
@@ -105,6 +111,11 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult UpdateParent(Guid id, [FromBody] Parent parent)
         {
+            if (_repository.Parent.FindByCondition(
+                p => p.IdNumber.Equals(parent.IdNumber) && !p.Id.Equals(id)
+            ).Any())
+                return Conflict("idNumber");
+
             _repository.Parent.UpdateParent(HttpContext.Items["entity"] as Parent, parent);
             return NoContent();
         }
