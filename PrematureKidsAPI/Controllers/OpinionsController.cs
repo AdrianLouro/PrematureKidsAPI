@@ -24,7 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "parent")]
         public IActionResult GetAllOpinions(Guid exerciseId, Guid parentId)
         {
             _logger.LogInfo($"Returned all opinions from database.");
@@ -37,7 +37,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpGet("{id}", Name = "OpinionById")]
+        [HttpGet("{id}", Name = "OpinionById"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Opinion>))]
         public IActionResult GetOpinionById(Guid id)
         {
@@ -45,7 +45,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Opinion.GetOpinionById(id));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateOpinion([FromBody] Opinion opinion)
         {
@@ -62,7 +62,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Opinion>))]
         public IActionResult DeleteOpinion(Guid id)
         {

@@ -24,14 +24,14 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetAllCategories()
         {
             _logger.LogInfo($"Returned all categories.");
             return Ok(_repository.Category.GetAllCategories());
         }
 
-        [HttpGet("{id}", Name = "CategoryById")]
+        [HttpGet("{id}", Name = "CategoryById"), Authorize]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Category>))]
         public IActionResult GetCategoryById(Guid id)
         {
@@ -39,7 +39,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Category.GetCategoryById(id));
         }
 
-        [HttpGet("{id}/exercises")]
+        [HttpGet("{id}/exercises"), Authorize(Roles = "administrator, doctor")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Category>))]
         public IActionResult GerExercises(Guid id)
         {
@@ -47,7 +47,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Exercise.GetCategoryExercises(id));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateCategory([FromBody] Category category)
         {
@@ -70,7 +70,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Category>))]
         public IActionResult DeleteCategory(Guid id)
         {

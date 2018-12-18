@@ -24,7 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "doctor")]
         public IActionResult GetAllExercises(Guid categoryId)
         {
             _logger.LogInfo($"Returned all exercises from database.");
@@ -35,7 +35,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpGet("{id}", Name = "ExerciseById")]
+        [HttpGet("{id}", Name = "ExerciseById"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
         public IActionResult GetExerciseById(Guid id)
         {
@@ -43,7 +43,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Exercise.GetExerciseById(id));
         }
 
-        [HttpGet("{id}/opinions")]
+        [HttpGet("{id}/opinions"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
         public IActionResult GetOpinions(Guid id)
         {
@@ -51,7 +51,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Opinion.GetExerciseOpinions((HttpContext.Items["entity"] as Exercise).Id));
         }
 
-        [HttpGet("{id}/videos")]
+        [HttpGet("{id}/videos"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
         public IActionResult GetVideos(Guid id)
         {
@@ -59,7 +59,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.ExerciseAttachment.GetExerciseVideos((HttpContext.Items["entity"] as Exercise).Id));
         }
 
-        [HttpGet("{id}/images")]
+        [HttpGet("{id}/images"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
         public IActionResult GetImages(Guid id)
         {
@@ -67,7 +67,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.ExerciseAttachment.GetExerciseImages((HttpContext.Items["entity"] as Exercise).Id));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateExercise([FromBody] Exercise exercise)
         {
@@ -84,7 +84,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Exercise>))]
         public IActionResult DeleteExercise(Guid id)
         {

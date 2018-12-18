@@ -27,7 +27,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{id}", Name = "ExerciseAttachmentById")]
+        [HttpGet("{id}", Name = "ExerciseAttachmentById"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<ExerciseAttachment>))]
         public IActionResult GetExerciseAttachmentById(Guid id)
         {
@@ -35,7 +35,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.ExerciseAttachment.GetExerciseAttachmentById(id));
         }
 
-        [HttpPost, DisableRequestSizeLimit]
+        [HttpPost, DisableRequestSizeLimit, Authorize(Roles = "doctor")]
         public IActionResult CreateExerciseAttachment(IFormFile file)
         {
             Guid guid = Guid.NewGuid();
@@ -71,7 +71,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<ExerciseAttachment>))]
         public IActionResult DeleteExerciseAttachment(Guid id)
         {

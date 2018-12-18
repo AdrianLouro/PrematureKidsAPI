@@ -24,14 +24,14 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "administrator")]
         public IActionResult GetAllDoctors()
         {
             _logger.LogInfo($"Returned all doctors from database.");
             return Ok(_repository.Doctor.GetAllDoctors());
         }
 
-        [HttpGet("{id}", Name = "DoctorById")]
+        [HttpGet("{id}", Name = "DoctorById"), Authorize]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult GetDoctorById(Guid id)
         {
@@ -39,7 +39,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(HttpContext.Items["entity"] as Doctor);
         }
 
-        [HttpGet("{id}/user")]
+        [HttpGet("{id}/user"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult GetUserWithoutDetails(Guid id)
         {
@@ -47,7 +47,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.User.GetUserWithoutDetail((HttpContext.Items["entity"] as Doctor).Id));
         }
 
-        [HttpGet("{id}/patients")]
+        [HttpGet("{id}/patients"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult GetPatients(Guid id)
         {
@@ -56,7 +56,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Doctor).Patients);
         }
 
-        [HttpGet("{id}/parents")]
+        [HttpGet("{id}/parents"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult GetParents(Guid id)
         {
@@ -64,7 +64,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Doctor.GetParentsOfDoctor(id));
         }
 
-        [HttpGet("{id}/exercises")]
+        [HttpGet("{id}/exercises"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult GerExercises(Guid id)
         {
@@ -72,7 +72,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Exercise.GetDoctorExercises(id));
         }
 
-        [HttpPost("{id}/patients/{patientId}")]
+        [HttpPost("{id}/patients/{patientId}"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddPatient(Guid id, Guid patientId)
         {
@@ -85,7 +85,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateDoctor([FromBody] DoctorUser doctorUser)
         {
@@ -127,7 +127,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Doctor>))]
         public IActionResult DeleteDoctor(Guid id)
         {

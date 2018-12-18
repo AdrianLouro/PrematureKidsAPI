@@ -24,14 +24,14 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetAllAssignments(Guid categoryId)
         {
             _logger.LogInfo($"Returned all assignments from database.");
             return Ok(_repository.Assignment.GetAllAssignments());
         }
 
-        [HttpGet("{id}", Name = "AssignmentById")]
+        [HttpGet("{id}", Name = "AssignmentById"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Assignment>))]
         public IActionResult GetAssignmentById(Guid id)
         {
@@ -39,7 +39,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Assignment.GetAssignmentById(id));
         }
 
-        [HttpGet("{id}/sessions")]
+        [HttpGet("{id}/sessions"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Assignment>))]
         public IActionResult GetSessions(Guid id)
         {
@@ -48,7 +48,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Assignment).Sessions);
         }
 
-        [HttpGet("{id}/exercise")]
+        [HttpGet("{id}/exercise"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Assignment>))]
         public IActionResult GetOpinions(Guid id)
         {
@@ -56,7 +56,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Exercise.GetExerciseById((HttpContext.Items["entity"] as Assignment).ExerciseId));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateAssignment([FromBody] Assignment assignment)
         {
@@ -75,7 +75,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Assignment>))]
         public IActionResult DeleteAssignment(Guid id)
         {

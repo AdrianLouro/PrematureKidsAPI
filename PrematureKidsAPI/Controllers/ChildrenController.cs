@@ -24,7 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "doctor")]
         public IActionResult GetAllChildren(string medicalHistoryId)
         {
             _logger.LogInfo($"Returned all children from database.");
@@ -37,7 +37,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpGet("{id}", Name = "ChildById")]
+        [HttpGet("{id}", Name = "ChildById"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult GetChildById(Guid id)
         {
@@ -45,7 +45,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(HttpContext.Items["entity"] as Child);
         }
 
-        [HttpGet("{id}/parents")]
+        [HttpGet("{id}/parents"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult GetParents(Guid id)
         {
@@ -54,7 +54,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Child).Parents);
         }
 
-        [HttpGet("{id}/doctors")]
+        [HttpGet("{id}/doctors"), Authorize(Roles = "parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult GetDoctors(Guid id)
         {
@@ -63,7 +63,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Child).Doctors);
         }
 
-        [HttpGet("{id}/assignments")]
+        [HttpGet("{id}/assignments"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult GetAssignments(Guid id)
         {
@@ -72,7 +72,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Child).Assignments);
         }
 
-        [HttpPost("{id}/parents/{parentId}")]
+        [HttpPost("{id}/parents/{parentId}"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult AddParent(Guid id, Guid parentId)
         {
@@ -85,7 +85,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}/parents/{parentId}")]
+        [HttpDelete("{id}/parents/{parentId}"), Authorize(Roles = "doctor")]
         //[ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult DeleteParent(Guid id, Guid parentId)
         {
@@ -97,7 +97,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateChild([FromBody] ChildExtended childExtended)
         {
@@ -134,7 +134,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "doctor")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Child>))]
         public IActionResult DeleteChild(Guid id)
         {

@@ -15,6 +15,7 @@ namespace Entities.ExtendedModels
         [Required(ErrorMessage = "Current password is required")]
         public string CurrentPassword { get; set; }
 
+        [MinLength(8, ErrorMessage = "New password must have at least 8 characters")]
         public string NewPassword { get; set; }
     }
 }

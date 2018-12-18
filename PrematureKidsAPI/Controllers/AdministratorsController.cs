@@ -24,7 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{id}", Name = "AdministratorById")]
+        [HttpGet("{id}", Name = "AdministratorById"), Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Administrator>))]
         public IActionResult GetAdministratorById(Guid id)
         {
@@ -32,7 +32,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(HttpContext.Items["entity"] as Administrator);
         }
 
-        [HttpGet("{id}/user")]
+        [HttpGet("{id}/user"), Authorize(Roles = "administrator")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Administrator>))]
         public IActionResult GetUserWithoutDetails(Guid id)
         {

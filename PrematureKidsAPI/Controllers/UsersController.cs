@@ -24,8 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{id}", Name = "UserById")]
-        [Authorize]
+        [HttpGet("{id}", Name = "UserById"), Authorize]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<User>))]
         public IActionResult GetUserById(Guid id)
         {
@@ -33,8 +32,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(HttpContext.Items["entity"] as User);
         }
 
-        [HttpPut("{id}")]
-        [Authorize]
+        [HttpPut("{id}"), Authorize]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult UpdateUser(Guid id, [FromBody] EditedUser editedUser)
         {
@@ -42,10 +40,10 @@ namespace PrematureKidsAPI.Controllers
 
             if (!Crypto.VerifyHashedPassword(user.Password, editedUser.CurrentPassword))
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
-            if (_repository.User.FindByCondition( u => u.Email.Equals(editedUser.Email) && !u.Id.Equals(id)).Any())
+            if (_repository.User.FindByCondition(u => u.Email.Equals(editedUser.Email) && !u.Id.Equals(id)).Any())
                 return Conflict("email");
 
             user.Email = editedUser.Email;

@@ -27,7 +27,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet("{id}", Name = "SessionAttachmentById")]
+        [HttpGet("{id}", Name = "SessionAttachmentById"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<SessionAttachment>))]
         public IActionResult GetSessionAttachmentById(Guid id)
         {
@@ -35,7 +35,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.SessionAttachment.GetSessionAttachmentById(id));
         }
 
-        [HttpPost, DisableRequestSizeLimit]
+        [HttpPost, DisableRequestSizeLimit, Authorize(Roles = "parent")]
         public IActionResult CreateSessionAttachment(IFormFile file)
         {
             Guid guid = Guid.NewGuid();
@@ -71,7 +71,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<SessionAttachment>))]
         public IActionResult DeleteSessionAttachment(Guid id)
         {

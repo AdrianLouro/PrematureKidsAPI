@@ -24,7 +24,7 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "doctor")]
         public IActionResult GetAllParents(string idNumber)
         {
             _logger.LogInfo($"Returned all parents from database.");
@@ -37,7 +37,7 @@ namespace PrematureKidsAPI.Controllers
             );
         }
 
-        [HttpGet("{id}", Name = "ParentById")]
+        [HttpGet("{id}", Name = "ParentById"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetParentById(Guid id)
         {
@@ -45,7 +45,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(HttpContext.Items["entity"] as Parent);
         }
 
-        [HttpGet("{id}/children")]
+        [HttpGet("{id}/children"), Authorize(Roles = "parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetChildren(Guid id)
         {
@@ -54,7 +54,7 @@ namespace PrematureKidsAPI.Controllers
             //return Ok((HttpContext.Items["entity"] as Parent).Children);
         }
 
-        [HttpGet("{id}/doctors")]
+        [HttpGet("{id}/doctors"), Authorize(Roles = "parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetDoctors(Guid id)
         {
@@ -62,7 +62,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Parent.GetDoctorsOfParent(id));
         }
 
-        [HttpGet("{id}/assignments")]
+        [HttpGet("{id}/assignments"), Authorize(Roles = "parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetAssignments(Guid id)
         {
@@ -70,7 +70,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Parent.GetAssignmentsOfParent(id));
         }
 
-        [HttpGet("{id}/user")]
+        [HttpGet("{id}/user"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult GetUserWithoutDetails(Guid id)
         {
@@ -120,7 +120,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Parent>))]
         public IActionResult DeleteParent(Guid id)
         {

@@ -24,14 +24,14 @@ namespace PrematureKidsAPI.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public IActionResult GetAllSessions(Guid categoryId)
         {
             _logger.LogInfo($"Returned all sessions from database.");
             return Ok(_repository.Session.GetAllSessions());
         }
 
-        [HttpGet("{id}/videos")]
+        [HttpGet("{id}/videos"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
         public IActionResult GetVideos(Guid id)
         {
@@ -39,7 +39,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.SessionAttachment.GetSessionVideos((HttpContext.Items["entity"] as Session).Id));
         }
 
-        [HttpGet("{id}/images")]
+        [HttpGet("{id}/images"), Authorize(Roles = "doctor, parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
         public IActionResult GetImages(Guid id)
         {
@@ -47,7 +47,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.SessionAttachment.GetSessionImages((HttpContext.Items["entity"] as Session).Id));
         }
 
-        [HttpGet("{id}", Name = "SessionById")]
+        [HttpGet("{id}", Name = "SessionById"), Authorize(Roles = "doctor, parent")]
         //[ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
         public IActionResult GetSessionById(Guid id)
         {
@@ -55,7 +55,7 @@ namespace PrematureKidsAPI.Controllers
             return Ok(_repository.Session.GetSessionById(id));
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateSession([FromBody] Session session)
         {
@@ -72,7 +72,7 @@ namespace PrematureKidsAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "parent")]
         [ServiceFilter(typeof(ValidateEntityExistsAttribute<Session>))]
         public IActionResult DeleteSession(Guid id)
         {
