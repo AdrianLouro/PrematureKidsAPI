@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using ActionFilters;
 using Contracts;
 using CryptoHelper;
@@ -17,11 +18,16 @@ namespace PrematureKidsAPI.Controllers
     {
         private ILoggerManager _logger;
         private IRepositoryWrapper _repository;
+        private SmtpClient _smtpClient;
+        private ISecurityManager _securityManager;
 
-        public DoctorsController(ILoggerManager logger, IRepositoryWrapper repository)
+        public DoctorsController(ILoggerManager logger, IRepositoryWrapper repository, SmtpClient smtpClient,
+            ISecurityManager securityManager)
         {
             _logger = logger;
             _repository = repository;
+            _smtpClient = smtpClient;
+            _securityManager = securityManager;
         }
 
         [HttpGet, Authorize(Roles = "administrator")]
@@ -95,10 +101,12 @@ namespace PrematureKidsAPI.Controllers
             if (_repository.Doctor.FindByCondition(d => d.BoardNumber.Equals(doctorUser.BoardNumber)).Any())
                 return Conflict("boardNumber");
 
+            string password = _securityManager.GenerateRandomPassword(8);
+
             Guid userId = _repository.User.CreateUser(new User(
                 doctorUser.Id,
                 doctorUser.Email,
-                Crypto.HashPassword("password"),
+                Crypto.HashPassword(password),
                 doctorUser.Role
             ));
 
@@ -110,6 +118,16 @@ namespace PrematureKidsAPI.Controllers
             );
 
             _repository.Doctor.CreateDoctor(doctor);
+
+            this._smtpClient.Send(new MailMessage(
+                    "prematurekidsapi@gmail.com",
+                    //doctorUser.Email,
+                    "prematurekidsapi@gmail.com",
+                    "PrematureKids: Account created",
+                    password
+                )
+            );
+
             return CreatedAtRoute("DoctorById", new {id = doctorUser.Id}, doctor);
         }
 

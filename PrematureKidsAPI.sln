@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrematureKidsAPI", "Prematu
 		{5D6EDABB-4960-4DA7-B4B4-40D354424A54} = {5D6EDABB-4960-4DA7-B4B4-40D354424A54}
 		{B349CCBE-ECDE-41C3-802B-5215128F35E6} = {B349CCBE-ECDE-41C3-802B-5215128F35E6}
 		{A6FF81EE-57C6-4D87-B335-520B67D5BAA1} = {A6FF81EE-57C6-4D87-B335-520B67D5BAA1}
+		{C77A3CF7-AC28-4262-B24C-88CFEC72A501} = {C77A3CF7-AC28-4262-B24C-88CFEC72A501}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Contracts", "Contracts\Contracts.csproj", "{5D6EDABB-4960-4DA7-B4B4-40D354424A54}"
@@ -29,7 +30,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionFilters", "ActionFilt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomExceptionMiddleware", "CustomExceptionMiddleware\CustomExceptionMiddleware.csproj", "{B59FF448-6ABD-4B8E-916C-2EF8DF160323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileSystemService", "FileSystemService\FileSystemService.csproj", "{C77A3CF7-AC28-4262-B24C-88CFEC72A501}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SecurityService", "FileSystemService\SecurityService.csproj", "{C77A3CF7-AC28-4262-B24C-88CFEC72A501}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

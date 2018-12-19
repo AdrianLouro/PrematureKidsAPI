@@ -39,9 +39,11 @@ namespace PrematureKidsAPI
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
+            services.ConfigureSecurityService();
             services.ConfigureMySqlContext(Configuration);
             services.ConfigureRepositoryWrapper();
             services.ConfigureAuthenticationService();
+            services.ConfigureSmtpClient();
             services.AddScoped<ValidationFilterAttribute>();
 
             services.AddScoped<ValidateEntityExistsAttribute<User>>();
