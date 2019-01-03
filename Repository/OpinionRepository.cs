@@ -10,53 +10,48 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public class ExerciseRepository : RepositoryBase<Exercise>, IExerciseRepository
+    public class OpinionRepository : RepositoryBase<Opinion>, IOpinionRepository
     {
-        public ExerciseRepository(RepositoryContext repositoryContext) : base(repositoryContext)
+        public OpinionRepository(RepositoryContext repositoryContext) : base(repositoryContext)
         {
         }
 
-        public IEnumerable<Exercise> GetAllExercises()
+        public IEnumerable<Opinion> GetAllOpinions()
         {
-            return this.RepositoryContext.Set<Exercise>()
-                .Include(exercise => exercise.Doctor)
-                .Include(exercise => exercise.Category)
-                .OrderBy(exercise => exercise.Title);
+            return this.RepositoryContext.Set<Opinion>()
+                .Include(opinion => opinion.Exercise)
+                .Include(opinion => opinion.Parent)
+                .OrderBy(opinion => opinion.Parent.Name);
         }
 
-        public IEnumerable<Exercise> GetDoctorExercises(Guid id)
+        public IEnumerable<Opinion> GetExerciseOpinions(Guid id)
         {
-            return GetAllExercises().Where(exercise => exercise.DoctorId == id);
+            return GetAllOpinions().Where(opinion => opinion.ExerciseId == id);
         }
 
-        public IEnumerable<Exercise> GetCategoryExercises(Guid id)
+        public Opinion GetOpinionById(Guid id)
         {
-            return GetAllExercises().Where(exercise => exercise.CategoryId == id);
+            return GetAllOpinions().FirstOrDefault(opinion => opinion.Id.Equals((id)));
         }
 
-        public Exercise GetExerciseById(Guid id)
+        public Guid CreateOpinion(Opinion opinion)
         {
-            return GetAllExercises().FirstOrDefault(exercise => exercise.Id.Equals((id)));
-        }
-
-        public Guid CreateExercise(Exercise exercise)
-        {
-            exercise.Id = Guid.NewGuid();
-            Create(exercise);
+            opinion.Id = Guid.NewGuid();
+            Create(opinion);
             Save();
-            return exercise.Id;
+            return opinion.Id;
         }
 
-        public void UpdateExercise(Exercise dbExercise, Exercise exercise)
+        public void UpdateOpinion(Opinion dbOpinion, Opinion opinion)
         {
-            dbExercise.Map(exercise);
-            Update(dbExercise);
+            dbOpinion.Map(opinion);
+            Update(dbOpinion);
             Save();
         }
 
-        public void DeleteExercise(Exercise exercise)
+        public void DeleteOpinion(Opinion opinion)
         {
-            Delete(exercise);
+            Delete(opinion);
             Save();
         }
     }
