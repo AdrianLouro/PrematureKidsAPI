@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 using ActionFilters;
 using Contracts;
 using CryptoHelper;
@@ -17,10 +18,12 @@ namespace PrematureKidsAPI.Controllers
     public class AuthController : ControllerBase
     {
         private IRepositoryWrapper _repository;
+        private ILoggerManager _logger;
 
-        public AuthController(IRepositoryWrapper repository)
+        public AuthController(IRepositoryWrapper repository, ILoggerManager logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
         [HttpPost, Route("login")]
@@ -29,17 +32,17 @@ namespace PrematureKidsAPI.Controllers
         {
             User dbUser = _repository.User.FindByCondition((u => u.Email == user.Email)).FirstOrDefault();
 
-            if (userDoesNotExist(user, dbUser)) return Unauthorized();
+            if (UserDoesNotExist(user, dbUser)) return Unauthorized();
 
-            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(getJwtSecurityToken(dbUser))});
+            return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(GetJwtSecurityToken(dbUser))});
         }
 
-        private bool userDoesNotExist(LoginModel user, User dbUser)
+        private bool UserDoesNotExist(LoginModel user, User dbUser)
         {
             return dbUser == null || (dbUser != null && !Crypto.VerifyHashedPassword(dbUser.Password, user.Password));
         }
 
-        private JwtSecurityToken getJwtSecurityToken(User dbUser)
+        private JwtSecurityToken GetJwtSecurityToken(User dbUser)
         {
             return new JwtSecurityToken(
                 issuer: "http://localhost:5000",

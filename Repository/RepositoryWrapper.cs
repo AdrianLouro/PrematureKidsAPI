@@ -21,187 +21,39 @@ namespace Repository
         private IExerciseAttachmentRepository _exerciseAttachment;
         private ISessionAttachmentRepository _sessionAttachment;
 
-        public IParentRepository Parent
-        {
-            get
-            {
-                if (_parent == null)
-                {
-                    _parent = new ParentRepository(_repoContext);
-                }
+        public IParentRepository Parent => _parent ?? (_parent = new ParentRepository(_repoContext));
 
-                return _parent;
-            }
-        }
+        public IUserRepository User => _user ?? (_user = new UserRepository(_repoContext));
 
-        public IUserRepository User
-        {
-            get
-            {
-                if (_user == null)
-                {
-                    _user = new UserRepository(_repoContext);
-                }
+        public IDoctorRepository Doctor => _doctor ?? (_doctor = new DoctorRepository(_repoContext));
 
-                return _user;
-            }
-        }
+        public IChildRepository Child => _child ?? (_child = new ChildRepository(_repoContext));
 
-        public IDoctorRepository Doctor
-        {
-            get
-            {
-                if (_doctor == null)
-                {
-                    _doctor = new DoctorRepository(_repoContext);
-                }
+        public IChildParentRepository ChildParent =>
+            _childParent ?? (_childParent = new ChildParentRepository(_repoContext));
 
-                return _doctor;
-            }
-        }
+        public IChildDoctorRepository ChildDoctor =>
+            _childDoctor ?? (_childDoctor = new ChildDoctorRepository(_repoContext));
 
-        public IChildRepository Child
-        {
-            get
-            {
-                if (_child == null)
-                {
-                    _child = new ChildRepository(_repoContext);
-                }
+        public ICategoryRepository Category => _category ?? (_category = new CategoryRepository(_repoContext));
 
-                return _child;
-            }
-        }
+        public IExerciseRepository Exercise => _exercise ?? (_exercise = new ExerciseRepository(_repoContext));
 
-        public IChildParentRepository ChildParent
-        {
-            get
-            {
-                if (_childParent == null)
-                {
-                    _childParent = new ChildParentRepository(_repoContext);
-                }
+        public IOpinionRepository Opinion => _opinion ?? (_opinion = new OpinionRepository(_repoContext));
 
-                return _childParent;
-            }
-        }
+        public IAssignmentRepository Assignment =>
+            _assignment ?? (_assignment = new AssignmentRepository(_repoContext));
 
-        public IChildDoctorRepository ChildDoctor
-        {
-            get
-            {
-                if (_childDoctor == null)
-                {
-                    _childDoctor = new ChildDoctorRepository(_repoContext);
-                }
+        public ISessionRepository Session => _session ?? (_session = new SessionRepository(_repoContext));
 
-                return _childDoctor;
-            }
-        }
+        public IAdministratorRepository Administrator =>
+            _administrator ?? (_administrator = new AdministratorRepository(_repoContext));
 
-        public ICategoryRepository Category
-        {
-            get
-            {
-                if (_category == null)
-                {
-                    _category = new CategoryRepository(_repoContext);
-                }
+        public IExerciseAttachmentRepository ExerciseAttachment =>
+            _exerciseAttachment ?? (_exerciseAttachment = new ExerciseAttachmentRepository(_repoContext));
 
-                return _category;
-            }
-        }
-
-        public IExerciseRepository Exercise
-        {
-            get
-            {
-                if (_exercise == null)
-                {
-                    _exercise = new ExerciseRepository(_repoContext);
-                }
-
-                return _exercise;
-            }
-        }
-
-        public IOpinionRepository Opinion
-        {
-            get
-            {
-                if (_opinion == null)
-                {
-                    _opinion = new OpinionRepository(_repoContext);
-                }
-
-                return _opinion;
-            }
-        }
-
-        public IAssignmentRepository Assignment
-        {
-            get
-            {
-                if (_assignment == null)
-                {
-                    _assignment = new AssignmentRepository(_repoContext);
-                }
-
-                return _assignment;
-            }
-        }
-
-        public ISessionRepository Session
-        {
-            get
-            {
-                if (_session == null)
-                {
-                    _session = new SessionRepository(_repoContext);
-                }
-
-                return _session;
-            }
-        }
-
-        public IAdministratorRepository Administrator
-        {
-            get
-            {
-                if (_administrator == null)
-                {
-                    _administrator = new AdministratorRepository(_repoContext);
-                }
-
-                return _administrator;
-            }
-        }
-
-        public IExerciseAttachmentRepository ExerciseAttachment
-        {
-            get
-            {
-                if (_exerciseAttachment == null)
-                {
-                    _exerciseAttachment = new ExerciseAttachmentRepository(_repoContext);
-                }
-
-                return _exerciseAttachment;
-            }
-        }
-
-        public ISessionAttachmentRepository SessionAttachment
-        {
-            get
-            {
-                if (_sessionAttachment == null)
-                {
-                    _sessionAttachment = new SessionAttachmentRepository(_repoContext);
-                }
-
-                return _sessionAttachment;
-            }
-        }
+        public ISessionAttachmentRepository SessionAttachment =>
+            _sessionAttachment ?? (_sessionAttachment = new SessionAttachmentRepository(_repoContext));
 
         public RepositoryWrapper(RepositoryContext repositoryContext)
         {
