@@ -39,6 +39,7 @@ namespace Repository
         public Guid CreateAssignment(Assignment assignment)
         {
             assignment.Id = Guid.NewGuid();
+            assignment.Date = DateTime.Now;
             Create(assignment);
             Save();
             return assignment.Id;

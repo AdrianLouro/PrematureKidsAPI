@@ -21,7 +21,7 @@ namespace Repository
             return this.RepositoryContext.Set<Opinion>()
                 .Include(opinion => opinion.Exercise)
                 .Include(opinion => opinion.Parent)
-                .OrderBy(opinion => opinion.Parent.Name);
+                .OrderByDescending(opinion => opinion.Date);
         }
 
         public IEnumerable<Opinion> GetExerciseOpinions(Guid id)
@@ -37,6 +37,7 @@ namespace Repository
         public Guid CreateOpinion(Opinion opinion)
         {
             opinion.Id = Guid.NewGuid();
+            opinion.Date = DateTime.Now;
             Create(opinion);
             Save();
             return opinion.Id;
@@ -45,6 +46,7 @@ namespace Repository
         public void UpdateOpinion(Opinion dbOpinion, Opinion opinion)
         {
             dbOpinion.Map(opinion);
+            dbOpinion.Date = DateTime.Now;
             Update(dbOpinion);
             Save();
         }

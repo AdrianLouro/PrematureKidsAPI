@@ -60,8 +60,6 @@ namespace PrematureKidsAPI.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public IActionResult CreateAssignment([FromBody] Assignment assignment)
         {
-            assignment.Date = DateTime.Now;
-
             _repository.Assignment.CreateAssignment(assignment);
             return CreatedAtRoute("AssignmentById", new {id = assignment.Id}, assignment);
         }

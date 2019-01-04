@@ -17,6 +17,10 @@ namespace Entities.Models
         [StringLength(65535, ErrorMessage = "Text can't be longer than 65535 characters")]
         public string Text { get; set; }
 
+        [Column("date")]
+        [Required(ErrorMessage = "Date is required")]
+        public DateTime Date { get; set; }
+
         [JsonIgnore]
         [Column("exercise")]
         [Required(ErrorMessage = "Exercise ID is required")]
