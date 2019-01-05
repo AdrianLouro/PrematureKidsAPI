@@ -72,5 +72,16 @@ namespace PrematureKidsAPI.Controllers
             _repository.User.UpdateUser(user);
             return NoContent();
         }
+
+        [HttpPut("{id}/status"), Authorize(Roles = "administrator")]
+        [ServiceFilter(typeof(ValidateEntityExistsAttribute<User>))]
+        public IActionResult UpdateUser(Guid id, [FromBody] UserStatus userStatus)
+        {
+            User user = HttpContext.Items["entity"] as User;
+            user.Blocked = userStatus.Blocked;
+            _repository.User.Update(user);
+            _repository.User.Save();
+            return NoContent();
+        }
     }
 }

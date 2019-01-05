@@ -3,7 +3,7 @@ using Entities.Models;
 
 namespace Entities.ReducedModels
 {
-    public class UserReduced: IEntity
+    public class UserReduced : IEntity
     {
         public Guid Id { get; set; }
 
@@ -11,15 +11,14 @@ namespace Entities.ReducedModels
 
         public string Role { get; set; }
 
-        public UserReduced()
-        {
-        }
+        public bool Blocked { get; set; }
 
         public UserReduced(User user)
         {
             Id = user.Id;
             Email = user.Email;
             Role = user.Role;
+            Blocked = user.Blocked;
         }
     }
 }

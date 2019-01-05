@@ -33,6 +33,7 @@ namespace PrematureKidsAPI.Controllers
             User dbUser = _repository.User.FindByCondition((u => u.Email == user.Email)).FirstOrDefault();
 
             if (UserDoesNotExist(user, dbUser)) return Unauthorized();
+            if (dbUser.Blocked) return Forbid();
 
             return Ok(new {Token = new JwtSecurityTokenHandler().WriteToken(GetJwtSecurityToken(dbUser))});
         }
