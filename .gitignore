@@ -262,4 +262,7 @@ __pycache__/
 
 # My files
 PrematureKidsAPI/logs/
-PrematureKidsAPI/wwwroot/uploads/
+PrematureKidsAPI/wwwroot/uploads/exercises/*
+!PrematureKidsAPI/wwwroot/uploads/exercises/.gitkeep
+PrematureKidsAPI/wwwroot/uploads/sessions/*
+!PrematureKidsAPI/wwwroot/uploads/sessions/.gitkeep
